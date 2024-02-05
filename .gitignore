@@ -10,9 +10,6 @@ prof
 *.a
 *.o
 
-# TA
-main.cpp
-
 # Editors junk
 *~
 \#*#

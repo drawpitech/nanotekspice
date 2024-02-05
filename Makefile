@@ -13,6 +13,7 @@ CXXFLAGS += -Waggregate-return -Wcast-qual
 CXXFLAGS += -Wunreachable-code
 CXXFLAGS += -U_FORTIFY_SOURCE
 CXXFLAGS += -iquote ./src
+CXXFLAGS += -iquote ./include
 
 # ↓ Binaries
 NAME := nanotekspice
