@@ -1,7 +1,9 @@
 # Binaries
 *.out
+nanotekspice
 unit_tests
-unit_tests_asan
+asan
+prof
 
 # Compilation
 .build/
