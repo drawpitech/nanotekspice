@@ -6,7 +6,7 @@
 ##
 
 # ↓ Basic variables
-CXX := gcc -std=c++20
+CXX := g++ -std=c++20
 CXXFLAGS := -W -Wall -Wextra -Wunused -Wpedantic
 CXXFLAGS += -Wundef -Wshadow -Wcast-align
 CXXFLAGS += -Waggregate-return -Wcast-qual

@@ -11,7 +11,13 @@
 
 namespace nts {
 
+    enum {
+        RET_VALID = 0,
+        RET_ERROR = 84,
+    };
+
     int tekspice(int argc, char **argv);
+    void help();
 
     enum Tristate {
         Undefined = (-true),
@@ -27,4 +33,4 @@ namespace nts {
         virtual nts::Tristate compute (std::size_t pin) = 0;
         virtual void setLink (std::size_t pin, nts::IComponent &other, std::size_t otherPin) = 0;
     };
-}
+} // namespace nts
