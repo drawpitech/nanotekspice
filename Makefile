@@ -9,7 +9,8 @@
 CXX := g++ -std=c++20
 CXXFLAGS := -W -Wall -Wextra -Wunused -Wpedantic
 CXXFLAGS += -Wundef -Wshadow -Wcast-align
-CXXFLAGS += -Waggregate-return -Wcast-qual
+# CXXFLAGS += -Waggregate-return
+CXXFLAGS += -Wcast-qual
 CXXFLAGS += -Wunreachable-code
 CXXFLAGS += -U_FORTIFY_SOURCE
 CXXFLAGS += -iquote ./src

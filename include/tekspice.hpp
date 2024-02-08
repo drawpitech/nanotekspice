@@ -34,4 +34,15 @@ namespace nts {
         virtual nts::Tristate compute (std::size_t pin) = 0;
         virtual void setLink (std::size_t pin, nts::IComponent &other, std::size_t otherPin) = 0;
     };
+    class Pin
+    {
+       public:
+        enum Type {Input, Output, Undefined};
+        Pin(): pin(0), type(Type::Undefined), state(Tristate::Undefined), component(nullptr) {}
+        ~Pin() = default;
+        size_t pin;
+        Type type;
+        Tristate state;
+        nts::IComponent *component;
+    };
 } // namespace nts
