@@ -32,10 +32,9 @@ nts::Shell::Command nts::Shell::prompt(std::string& buf)
         std::cout << "\n";
         return EXIT;
     }
-    if (commands.find(buf) != commands.end())
-        return commands.at(buf);
-    if (buf.find('=') != std::string::npos)
-        return INPUT;
+    for (const auto& e : COMMANDS_MATCH)
+        if (std::regex_search(buf, e._pattern))
+            return e._cmd;
     return UNDEFINED;
 }
 
@@ -63,17 +62,12 @@ void nts::Shell::runCommand(nts::Shell::Command cmd, const std::string& buf)
             }
 
             int value = 0;
-            bool is_valid = true;
             try {
                 value = std::stoi(raw_value);
             } catch (std::exception& e) {
-                is_valid = false;
-            }
-            if (is_valid && (value < -1 || value > 1)) {
                 std::cerr << "Invalid value" << std::endl;
                 return;
             }
-
             std::cout << "var: " << input << "\nvalue: " << value << "\n";
             // TODO
             break;
