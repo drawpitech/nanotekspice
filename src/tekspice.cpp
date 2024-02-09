@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+#include "Shell.hpp"
+
 int nts::tekspice(int argc, char **argv)
 {
     if (argv == nullptr || argc == 0)
@@ -28,6 +30,9 @@ int nts::tekspice(int argc, char **argv)
         nts::help();
         return nts::RET_VALID;
     }
+
+    Shell shell(arg);
+    shell.run();
     return nts::RET_VALID;
 }
 
