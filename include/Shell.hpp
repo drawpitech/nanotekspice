@@ -18,7 +18,7 @@ namespace nts {
 class Shell
 {
    public:
-    Shell(IComponent *component);
+    Shell(IComponent *circuit);
     ~Shell();
 
     void run();
@@ -40,7 +40,7 @@ class Shell
 
     std::string _input;
     bool _running = false;
-    IComponent *_component;
+    IComponent *_circuit;
     Shell::Command _runningCmd = UNDEFINED;
 };
 

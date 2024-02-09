@@ -10,7 +10,7 @@
 #include <iostream>
 #include <string>
 
-nts::Shell::Shell(IComponent* component) : _component(component) {}
+nts::Shell::Shell(IComponent* component) : _circuit(component) {}
 
 nts::Shell::~Shell() = default;
 
@@ -42,30 +42,29 @@ void nts::Shell::runCommand(nts::Shell::Command cmd)
         cmd = _runningCmd;
     switch (cmd) {
         case UNDEFINED:
-            std::cerr << "Unknown command" << std::endl;
-            _running = false;
+            std::cerr << "Unknown command \"" << _input << "\"" << std::endl;
             break;
         case EXIT:
             _running = false;
             break;
         case DISPLAY:
-            if (_component == nullptr) {
+            if (_circuit == nullptr) {
                 std::cerr << "No component to display" << std::endl;
                 _running = false;
                 break;
             }
-            _component->dump();
+            _circuit->dump();
             break;
         case SIMULATE:
-            if (_component == nullptr) {
+            if (_circuit == nullptr) {
                 std::cerr << "No component to simulate" << std::endl;
                 _running = false;
                 break;
             }
-            _component->simulate(1);
+            _circuit->simulate(1);
             break;
         case LOOP:
-            if (_component == nullptr) {
+            if (_circuit == nullptr) {
                 std::cerr << "No component to display" << std::endl;
                 _running = false;
                 break;
@@ -74,7 +73,7 @@ void nts::Shell::runCommand(nts::Shell::Command cmd)
             runCommand(DISPLAY);
             break;
         case INPUT:
-            if (_component == nullptr) {
+            if (_circuit == nullptr) {
                 std::cerr << "No component to input" << std::endl;
                 _running = false;
                 break;
