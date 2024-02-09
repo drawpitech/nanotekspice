@@ -7,6 +7,7 @@
 
 #include "AComponent.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <utility>
 
@@ -50,18 +51,33 @@ void nts::AComponent::setLink(
     _pins.at(pin).pin = otherPin;
 }
 
+static std::vector<nts::Pin> get_pins(
+    std::vector<nts::Pin> pins, nts::Pin::Type type)
+{
+    std::vector<nts::Pin> ret;
+    std::copy_if(
+        pins.begin(), pins.end(), std::back_inserter(ret),
+        [type](const nts::Pin &pin) { return pin.type == type; });
+    std::sort(
+        pins.begin(), pins.end(), [](const nts::Pin &a, const nts::Pin &b) {
+            return a.component->getName() < b.component->getName();
+        });
+    return ret;
+}
+
 void nts::AComponent::dump() const
 {
     std::cout << "tick: " << _tick << "\n"
               << "input(s):\n";
-    for (const auto &pin : _pins)
+
+    for (const auto &pin : get_pins(_pins, Pin::Input))
         if (pin.type == Pin::Input)
-            std::cout << pin.component->getName() << " "
+            std::cout << "  " << pin.component->getName() << " "
                       << TRISTATE_TO_CHAR.at(pin.state) << "\n";
     std::cout << "output(s):\n";
-    for (const auto &pin : _pins)
+    for (const auto &pin : get_pins(_pins, Pin::Output))
         if (pin.type == Pin::Output)
-            std::cout << pin.component->getName() << " "
+            std::cout << "  " << pin.component->getName() << ": "
                       << TRISTATE_TO_CHAR.at(pin.state) << "\n";
 }
 

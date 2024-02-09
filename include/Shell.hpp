@@ -11,12 +11,14 @@
 #include <string>
 #include <vector>
 
+#include "tekspice.hpp"
+
 namespace nts {
 
 class Shell
 {
    public:
-    Shell(std::string &filename);
+    Shell(IComponent *component);
     ~Shell();
 
     void run();
@@ -38,6 +40,7 @@ class Shell
 
     std::string _input;
     bool _running = false;
+    IComponent *_component;
 };
 
 class CommandMatch

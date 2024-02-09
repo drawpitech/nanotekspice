@@ -10,7 +10,7 @@
 #include <iostream>
 #include <string>
 
-nts::Shell::Shell(std::string& /*filename*/) {}
+nts::Shell::Shell(IComponent* component) : _component(component) {}
 
 nts::Shell::~Shell() = default;
 
@@ -25,10 +25,8 @@ nts::Shell::Command nts::Shell::prompt()
 {
     std::cout << "> ";
 
-    if (!std::getline(std::cin, _input)) {
-        std::cout << "\n";
+    if (!std::getline(std::cin, _input))
         return EXIT;
-    }
     for (const auto& e : COMMANDS_MATCH)
         if (std::regex_search(_input, e._pattern))
             return e._cmd;
@@ -46,27 +44,51 @@ void nts::Shell::runCommand(nts::Shell::Command cmd)
             _running = false;
             break;
         case DISPLAY:
+            if (_component == nullptr) {
+                std::cerr << "No component to display" << std::endl;
+                _running = false;
+                break;
+            }
+            _component->dump();
+            break;
         case SIMULATE:
+            if (_component == nullptr) {
+                std::cerr << "No component to simulate" << std::endl;
+                _running = false;
+                break;
+            }
+            _component->simulate(1);
+            break;
         case LOOP:
+            if (_component == nullptr) {
+                std::cerr << "No component to display" << std::endl;
+                _running = false;
+                break;
+            }
             // TODO
             break;
         case INPUT:
-            std::string input = _input.substr(0, _input.find('='));
-            std::string raw_value = _input.substr(_input.find('=') + 1);
-            if (input.empty()) {
-                std::cerr << "Invalid input" << std::endl;
-                return;
+            if (_component == nullptr) {
+                std::cerr << "No component to input" << std::endl;
+                _running = false;
+                break;
             }
 
+            std::string pin_name = _input.substr(0, _input.find('='));
             int value = 0;
             try {
-                value = std::stoi(raw_value);
+                value = std::stoi(_input.substr(_input.find('=') + 1));
             } catch (std::exception& e) {
                 std::cerr << "Invalid value" << std::endl;
-                return;
+                _running = false;
+                break;
             }
-            std::cout << "var: " << input << "\nvalue: " << value << "\n";
+
+            (void)pin_name;
+            (void)value;
             // TODO
+            // Get component pin with pin_name
+            // _component->setPin(pin, value);
             break;
     }
 }

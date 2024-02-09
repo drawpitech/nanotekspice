@@ -9,6 +9,7 @@
 
 #include <iostream>
 
+#include "AComponent.hpp"
 #include "Shell.hpp"
 
 int nts::tekspice(int argc, char **argv)
@@ -31,7 +32,8 @@ int nts::tekspice(int argc, char **argv)
         return nts::RET_VALID;
     }
 
-    Shell shell(arg);
+    AComponent dummy(0, {}, {}, "component");
+    Shell shell(&dummy);
     shell.run();
     return nts::RET_VALID;
 }
