@@ -85,3 +85,22 @@ std::string nts::AComponent::getName() const
 {
     return _name;
 }
+
+void nts::AComponent::setInput(std::string pin_name, nts::Tristate value)
+{
+    auto it = std::find_if(
+        _pins.begin(), _pins.end(), [pin_name](const nts::Pin &pin) {
+            return (pin.component != nullptr) &&
+                   pin.component->getName() == pin_name;
+        });
+    if (it == _pins.end())
+        throw std::out_of_range("Pin not found");
+    setInput(it->pin, value);
+}
+
+void nts::AComponent::setInput(size_t pin, nts::Tristate value)
+{
+    if (pin > _nb_pins)
+        throw std::out_of_range("Pin is out of range");
+    _pins.at(pin).state = value;
+}

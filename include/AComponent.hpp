@@ -20,15 +20,17 @@ class AComponent : public IComponent
     AComponent(
         size_t nb_pins, std::vector<size_t> inPins, std::vector<size_t> outPins,
         std::string name);
-    ~AComponent();
+    ~AComponent() override;
 
-    void simulate(std::size_t tick);
-    nts::Tristate compute(std::size_t pin);
+    void simulate(std::size_t tick) override;
+    nts::Tristate compute(std::size_t pin) override;
     void setLink(
         std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
     void dump() const override;
     std::string getName() const override;
     // nts::Tristate getLink(std::size_t pin) const;
+    void setInput(std::string pin_name, Tristate value) override;
+    void setInput(size_t pin, Tristate value) override;
 
    protected:
     std::vector<Pin> _pins;

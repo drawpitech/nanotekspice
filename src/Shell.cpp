@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <string>
+#include "tekspice.hpp"
 
 nts::Shell::Shell(IComponent* component) : _circuit(component) {}
 
@@ -80,20 +81,25 @@ void nts::Shell::runCommand(nts::Shell::Command cmd)
             }
 
             std::string pin_name = _input.substr(0, _input.find('='));
-            int value = 0;
+            std::string value_str = _input.substr(_input.find('=') + 1);
+            Tristate state = Undefined;
+            switch (value_str[0]) {
+                case '1':
+                    state = True;
+                    break;
+                case '0':
+                    state = False;
+                    break;
+                case 'U':
+                default:
+                    state = Undefined;
+                    break;
+            };
             try {
-                value = std::stoi(_input.substr(_input.find('=') + 1));
+                _circuit->setInput(pin_name, state);
             } catch (std::exception& e) {
-                std::cerr << "Invalid value" << std::endl;
-                _running = false;
-                break;
+                std::cerr << e.what() << std::endl;
             }
-
-            (void)pin_name;
-            (void)value;
-            // TODO
-            // Get component pin with pin_name
-            // _component->setPin(pin, value);
             break;
     }
 }

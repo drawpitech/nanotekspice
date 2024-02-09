@@ -59,6 +59,6 @@ static const std::vector<CommandMatch> COMMANDS_MATCH = {
     {R"(\bdisplay\b)", Shell::DISPLAY},
     {R"(\bsimulate\b)", Shell::SIMULATE},
     {R"(\bloop\b)", Shell::LOOP},
-    {R"((\w+)=(-1|0|1))", Shell::INPUT},
+    {R"((\w+)=(U|0|1)$)", Shell::INPUT},
 };
 }  // namespace nts
