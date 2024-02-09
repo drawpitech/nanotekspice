@@ -7,24 +7,41 @@
 
 #pragma once
 
-#include "tekspice.hpp"
+#include <map>
 #include <vector>
 
+#include "tekspice.hpp"
+
 namespace nts {
-    class AComponent : public IComponent{
-    public:
-        AComponent(size_t nb_pins, std::vector<size_t> inPins, std::vector<size_t> outPins);
-        ~AComponent();
 
-        void simulate(std::size_t tick);
-        nts::Tristate compute (std::size_t pin);
-        void setLink (std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
-        // nts::Tristate getLink(std::size_t pin) const;
+class AComponent : public IComponent
+{
+   public:
+    AComponent(
+        size_t nb_pins, std::vector<size_t> inPins, std::vector<size_t> outPins,
+        std::string name);
+    ~AComponent();
 
-    protected:
-        std::vector<Pin> _pins;
-        size_t _nb_pins;
-        size_t _tick;
-    private:
-    };
-}
+    void simulate(std::size_t tick);
+    nts::Tristate compute(std::size_t pin);
+    void setLink(
+        std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
+    void dump() const override;
+    std::string getName() const override;
+    // nts::Tristate getLink(std::size_t pin) const;
+
+   protected:
+    std::vector<Pin> _pins;
+    size_t _nb_pins;
+    size_t _tick;
+    std::string _name;
+
+   private:
+};
+
+static const std::map<Tristate, char> TRISTATE_TO_CHAR = {
+    {nts::Tristate::True, '1'},
+    {nts::Tristate::False, '0'},
+    {nts::Tristate::Undefined, 'U'}};
+
+}  // namespace nts
