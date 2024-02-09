@@ -36,11 +36,12 @@ class Shell
    private:
     nts::Shell::Command prompt();
     void extracted();
-    void runCommand(nts::Shell::Command cmd);
+    void runCommand(nts::Shell::Command cmd = UNDEFINED);
 
     std::string _input;
     bool _running = false;
     IComponent *_component;
+    Shell::Command _runningCmd = UNDEFINED;
 };
 
 class CommandMatch

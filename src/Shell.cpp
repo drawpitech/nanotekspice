@@ -17,8 +17,11 @@ nts::Shell::~Shell() = default;
 void nts::Shell::run()
 {
     _running = true;
-    while (_running)
-        runCommand(prompt());
+    while (_running) {
+        if (_runningCmd != LOOP)
+            _runningCmd = prompt();
+        runCommand();
+    }
 }
 
 nts::Shell::Command nts::Shell::prompt()
@@ -35,6 +38,8 @@ nts::Shell::Command nts::Shell::prompt()
 
 void nts::Shell::runCommand(nts::Shell::Command cmd)
 {
+    if (cmd == UNDEFINED)
+        cmd = _runningCmd;
     switch (cmd) {
         case UNDEFINED:
             std::cerr << "Unknown command" << std::endl;
@@ -65,7 +70,8 @@ void nts::Shell::runCommand(nts::Shell::Command cmd)
                 _running = false;
                 break;
             }
-            // TODO
+            runCommand(SIMULATE);
+            runCommand(DISPLAY);
             break;
         case INPUT:
             if (_component == nullptr) {
