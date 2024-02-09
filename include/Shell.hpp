@@ -9,7 +9,6 @@
 
 #include <regex>
 #include <string>
-#include <utility>
 #include <vector>
 
 namespace nts {
@@ -33,9 +32,11 @@ class Shell
     };
 
    private:
-    static nts::Shell::Command prompt(std::string &buf);
+    nts::Shell::Command prompt();
     void extracted();
-    void runCommand(nts::Shell::Command cmd, const std::string &buf);
+    void runCommand(nts::Shell::Command cmd);
+
+    std::string _input;
     bool _running = false;
 };
 
