@@ -27,6 +27,10 @@ enum Tristate
     True = true,
     False = false
 };
+Tristate operator&&(Tristate left, Tristate right);
+Tristate operator||(Tristate left, Tristate right);
+Tristate operator!(Tristate entry);
+Tristate operator^(Tristate left, Tristate right);
 
 class IComponent
 {
@@ -55,7 +59,8 @@ class Pin
         : pin(0),
           type(Type::Undefined),
           state(Tristate::Undefined),
-          component(nullptr)
+          component(nullptr),
+          computed(false)
     {
     }
     ~Pin() = default;
@@ -64,5 +69,6 @@ class Pin
     Type type;
     Tristate state;
     nts::IComponent *component;
+    bool computed;
 };
 }  // namespace nts
