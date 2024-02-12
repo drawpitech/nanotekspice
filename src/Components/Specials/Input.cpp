@@ -31,6 +31,7 @@ void nts::InputComponent::simulate(std::size_t tick)
 
 nts::Tristate nts::InputComponent::compute(std::size_t pin)
 {
+    this->simulate(1);
     if (pin > this->_nb_pins)
         throw std::out_of_range("Pin is out of range");
     if (this->_pins.at(1).computed)

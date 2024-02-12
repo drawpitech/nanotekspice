@@ -21,7 +21,7 @@ void nts::Circuit::AddComponent(IComponent &newComponent, std::string name)
     if (_components.find(name) != _components.end())
         throw std::out_of_range(
             "Same compoenet refered two times in the circuit");
-    this->_components.at(name) = &newComponent;
+    this->_components.insert({name, &newComponent});
 }
 
 nts::IComponent &nts::Circuit::getComponent(std::string name)
@@ -32,10 +32,12 @@ nts::IComponent &nts::Circuit::getComponent(std::string name)
 void nts::Circuit::simulate(std::size_t /* ticks */)
 {
     for (auto [_, component] : _components) {
-        if (component->getType() != nts::Type::Input)
+        if (component->getType() != nts::Type::Output)
             continue;
-        component->compute(1);
+        component->compute(2);
     }
+    _tick += 1;
+    this->re_init();
 }
 
 void nts::Circuit::dump()

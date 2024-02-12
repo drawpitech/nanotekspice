@@ -115,7 +115,7 @@ void nts::Shell::Input()
     };
     try {
         (void)state;
-        /* _circuit->setInput(pin_name, state); */
+        _circuit->getComponent(pin_name).setInput(state);
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
     }
