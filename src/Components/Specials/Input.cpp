@@ -15,7 +15,7 @@
 #include "tekspice.hpp"
 
 nts::InputComponent::InputComponent(const std::string &name)
-    : nts::AComponent(1, {}, {1}, name), _next(nts::Tristate::Undefined)
+    : nts::AComponent(1, {}, {1}, name, Input), _next(nts::Tristate::Undefined)
 {
 }
 

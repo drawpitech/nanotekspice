@@ -15,7 +15,7 @@
 #include "tekspice.hpp"
 
 nts::ClockComponent::ClockComponent(const std::string &name)
-    : nts::AComponent(1, {}, {1}, name)
+    : nts::AComponent(1, {}, {1}, name, Input)
 {
 }
 

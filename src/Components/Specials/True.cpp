@@ -15,7 +15,7 @@
 #include "tekspice.hpp"
 
 nts::TrueComponent::TrueComponent(const std::string &name)
-    : nts::AComponent(1, {}, {1}, name)
+    : nts::AComponent(1, {}, {1}, name, Input)
 {
 }
 

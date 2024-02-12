@@ -19,13 +19,17 @@
 
 nts::AComponent::AComponent(
     size_t nb_pins, std::vector<size_t> inPins, std::vector<size_t> outPins,
-    std::string name)
-    : _pins(nb_pins + 1), _nb_pins(nb_pins), _tick(0), _name(std::move(name))
+    std::string name, Type type)
+    : _pins(nb_pins + 1),
+      _nb_pins(nb_pins),
+      _tick(0),
+      _name(std::move(name)),
+      _type(type)
 {
     for (auto pin : inPins)
-        _pins.at(pin).type = Pin::Input;
+        _pins.at(pin).type = Input;
     for (auto pin : outPins)
-        _pins.at(pin).type = Pin::Output;
+        _pins.at(pin).type = Output;
 }
 
 nts::AComponent::~AComponent() = default;
@@ -41,11 +45,18 @@ nts::Tristate nts::AComponent::compute(size_t pin)
         throw std::out_of_range("Pin is out of range");
     if (_pins.at(pin).component == nullptr)
         throw std::out_of_range("This pin is not set it should not append");
-    if (_pins.at(pin).type == Pin::Output)
+    if (_pins.at(pin).type == Output)
         return _pins.at(pin).state;
-    if (_pins.at(pin).type == Pin::Input)
+    if (_pins.at(pin).type == Input)
         return _pins.at(pin).component->compute(_pins.at(pin).pin);
-    return nts::Undefined;
+    return nts::Tristate::Undefined;
+}
+
+nts::Tristate nts::AComponent::getPinValue(std::size_t pin) const
+{
+    if (pin > _nb_pins)
+        throw std::out_of_range("Pin is out of range");
+    return this->_pins.at(pin).state;
 }
 
 void nts::AComponent::setLink(
@@ -58,7 +69,7 @@ void nts::AComponent::setLink(
 }
 
 static std::vector<nts::Pin> get_pins(
-    std::vector<nts::Pin> pins, nts::Pin::Type type)
+    std::vector<nts::Pin> pins, nts::Type type)
 {
     std::vector<nts::Pin> ret;
     std::copy_if(
@@ -76,15 +87,20 @@ void nts::AComponent::dump() const
     std::cout << "tick: " << _tick << "\n"
               << "input(s):\n";
 
-    for (const auto &pin : get_pins(_pins, Pin::Input))
-        if (pin.type == Pin::Input)
+    for (const auto &pin : get_pins(_pins, Input))
+        if (pin.type == Input)
             std::cout << "  " << pin.component->getName() << " "
                       << TRISTATE_TO_CHAR.at(pin.state) << "\n";
     std::cout << "output(s):\n";
-    for (const auto &pin : get_pins(_pins, Pin::Output))
-        if (pin.type == Pin::Output)
+    for (const auto &pin : get_pins(_pins, Output))
+        if (pin.type == Output)
             std::cout << "  " << pin.component->getName() << ": "
                       << TRISTATE_TO_CHAR.at(pin.state) << "\n";
+}
+
+nts::Type nts::AComponent::getType() const
+{
+    return _type;
 }
 
 std::string nts::AComponent::getName() const
@@ -92,8 +108,15 @@ std::string nts::AComponent::getName() const
     return _name;
 }
 
-void nts::AComponent::setInput(nts::Tristate value)
+void nts::AComponent::setInput(nts::Tristate /* value */)
 {
     throw std::out_of_range(
         "This method should't be called if component is not an input");
+}
+
+void nts::AComponent::reset_pins()
+{
+    for (auto pin : _pins) {
+        pin.computed = false;
+    }
 }

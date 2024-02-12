@@ -15,7 +15,7 @@
 #include "tekspice.hpp"
 
 nts::OutputComponent::OutputComponent(const std::string &name)
-    : nts::AComponent(2, {1}, {2}, name)
+    : nts::AComponent(2, {1}, {2}, name, Output)
 {
 }
 
@@ -27,7 +27,7 @@ nts::Tristate nts::OutputComponent::compute(std::size_t pin)
         throw std::out_of_range("Pin is out of range");
     this->_pins.at(1).component->compute(this->_pins.at(1).pin);
 
-    nts::Tristate res = !this->_pins.at(1).state;
+    const nts::Tristate res = !this->_pins.at(1).state;
 
     this->_pins.at(2).state = res;
     return res;
