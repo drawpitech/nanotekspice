@@ -7,6 +7,13 @@
 
 #include "Components/Elementary/NotComponent.hpp"
 
+#include <cstddef>
+#include <stdexcept>
+#include <string>
+
+#include "AComponent.hpp"
+#include "tekspice.hpp"
+
 nts::NotComponent::NotComponent(const std::string &name)
     : nts::AComponent(2, {1}, {2}, name)
 {
@@ -20,10 +27,13 @@ nts::Tristate nts::NotComponent::compute(std::size_t pin)
         throw std::out_of_range("Pin is out of range");
     if (pin == 1)
         return nts::Tristate::Undefined;
+    if (this->_pins.at(2).computed)
+        throw std::out_of_range("Infinite loop");
+    this->_pins.at(2).computed = true;
 
     this->_pins.at(1).component->compute(this->_pins.at(1).pin);
 
-    nts::Tristate res = !this->_pins.at(1).state;
+    const nts::Tristate res = !this->_pins.at(1).state;
 
     this->_pins.at(2).state = res;
     return res;

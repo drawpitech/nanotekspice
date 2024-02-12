@@ -7,6 +7,13 @@
 
 #include "Components/Specials/Output.hpp"
 
+#include <cstddef>
+#include <stdexcept>
+#include <string>
+
+#include "AComponent.hpp"
+#include "tekspice.hpp"
+
 nts::OutputComponent::OutputComponent(const std::string &name)
     : nts::AComponent(2, {1}, {2}, name)
 {

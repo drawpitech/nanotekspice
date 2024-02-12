@@ -29,8 +29,7 @@ class AComponent : public IComponent
     void dump() const override;
     std::string getName() const override;
     // nts::Tristate getLink(std::size_t pin) const;
-    void setInput(std::string pin_name, Tristate value) override;
-    void setInput(size_t pin, Tristate value) override;
+    void setInput(Tristate value) override;
 
    protected:
     std::vector<Pin> _pins;

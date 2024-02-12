@@ -42,8 +42,7 @@ class IComponent
         std::size_t pin, nts::IComponent &other, std::size_t otherPin) = 0;
     virtual void dump() const = 0;
     virtual std::string getName() const = 0;
-    virtual void setInput(std::string pin_name, Tristate value) = 0;
-    virtual void setInput(size_t pin, Tristate value) = 0;
+    virtual void setInput(Tristate value) = 0;
 };
 class Pin
 {

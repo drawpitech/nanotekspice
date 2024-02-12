@@ -21,7 +21,6 @@ class OutputComponent : public AComponent
 
    protected:
    private:
-    nts::Tristate _next;
 };
 
 }  // namespace nts

@@ -7,6 +7,13 @@
 
 #include "Components/Specials/Input.hpp"
 
+#include <cstddef>
+#include <stdexcept>
+#include <string>
+
+#include "AComponent.hpp"
+#include "tekspice.hpp"
+
 nts::InputComponent::InputComponent(const std::string &name)
     : nts::AComponent(1, {}, {1}, name), _next(nts::Tristate::Undefined)
 {
@@ -26,5 +33,14 @@ nts::Tristate nts::InputComponent::compute(std::size_t pin)
 {
     if (pin > this->_nb_pins)
         throw std::out_of_range("Pin is out of range");
+    if (this->_pins.at(1).computed)
+        throw std::out_of_range("Pin used multiple times");
+    this->_pins.at(1).computed = true;
+
     return this->_pins.at(1).state;
+}
+
+void nts::InputComponent::setInput(Tristate value)
+{
+    this->_next = value;
 }

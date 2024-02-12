@@ -19,6 +19,7 @@ class InputComponent : public AComponent
 
     void simulate(std::size_t tick) final;
     nts::Tristate compute(std::size_t pin) final;
+    void setInput(Tristate value) final;
 
    protected:
    private:
