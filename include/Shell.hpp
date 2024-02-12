@@ -12,13 +12,14 @@
 #include <vector>
 
 #include "tekspice.hpp"
+#include "Circuit.hpp"
 
 namespace nts {
 
 class Shell
 {
    public:
-    Shell(IComponent *circuit);
+    Shell(Circuit *circuit);
     ~Shell();
 
     void run();
@@ -40,7 +41,7 @@ class Shell
 
     std::string _input;
     bool _running = false;
-    IComponent *_circuit;
+    Circuit *_circuit;
     Shell::Command _runningCmd = UNDEFINED;
 
     void Exit();

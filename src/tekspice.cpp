@@ -32,7 +32,7 @@ int nts::tekspice(int argc, char **argv)
         return nts::RET_VALID;
     }
 
-    AComponent dummy(0, {}, {}, "component");
+    Circuit dummy;
     Shell shell(&dummy);
     shell.run();
     return nts::RET_VALID;

@@ -12,7 +12,7 @@
 #include "AComponent.hpp"
 #include "tekspice.hpp"
 
-nts::Circuit::Circuit() {}
+nts::Circuit::Circuit() : _nb_components(0), _tick(0) {}
 
 nts::Circuit::~Circuit() {}
 

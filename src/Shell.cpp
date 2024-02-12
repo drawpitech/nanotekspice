@@ -12,7 +12,7 @@
 
 #include "tekspice.hpp"
 
-nts::Shell::Shell(IComponent* circuit) : _circuit(circuit) {}
+nts::Shell::Shell(Circuit* circuit) : _circuit(circuit) {}
 
 nts::Shell::~Shell() = default;
 
