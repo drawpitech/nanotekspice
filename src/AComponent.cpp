@@ -116,7 +116,10 @@ void nts::AComponent::setInput(nts::Tristate /* value */)
 
 void nts::AComponent::reset_pins()
 {
-    for (auto pin : _pins) {
-        pin.computed = false;
+    // for (auto pin : _pins) {
+    // pin.computed = false;
+    // }
+    for (size_t i = 0; i < _nb_pins + 1; i++) {
+        _pins.at(i).computed = false;
     }
 }

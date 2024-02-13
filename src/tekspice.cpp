@@ -10,6 +10,11 @@
 #include <iostream>
 
 #include "AComponent.hpp"
+#include "Circuit.hpp"
+#include "Components/Elementary/AndComponent.hpp"
+#include "Components/Specials/Clock.hpp"
+#include "Components/Specials/Input.hpp"
+#include "Components/Specials/Output.hpp"
 #include "Shell.hpp"
 
 int nts::tekspice(int argc, char **argv)
@@ -31,8 +36,24 @@ int nts::tekspice(int argc, char **argv)
         nts::help();
         return nts::RET_VALID;
     }
-
+    // InputComponent in_a{"in_a"};
+    // ClockComponent clock{"clock"};
+    // AndComponent andgate{"andgate"};
+    // OutputComponent out_b{"out_b"};
+    //
+    // in_a.setLink(1, andgate, 1);
+    // clock.setLink(1, andgate, 2);
+    // andgate.setLink(1, in_a, 1);
+    // andgate.setLink(2, clock, 1);
+    // out_b.setLink(1, andgate, 3);
+    // andgate.setLink(3, out_b, 1);
+    //
     Circuit dummy;
+    // dummy.AddComponent(in_a);
+    // dummy.AddComponent(clock);
+    // dummy.AddComponent(andgate);
+    // dummy.AddComponent(out_b);
+
     Shell shell(&dummy);
     shell.run();
     return nts::RET_VALID;

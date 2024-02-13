@@ -20,7 +20,7 @@ class Circuit
     Circuit();
     ~Circuit();
 
-    void AddComponent(IComponent &newComponent, std::string name);
+    void AddComponent(IComponent &newComponent);
     IComponent &getComponent(std::string name);
     void simulate(std::size_t ticks);
     void dump();

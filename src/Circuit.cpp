@@ -7,26 +7,36 @@
 
 #include "Circuit.hpp"
 
+#include <cstddef>
 #include <iostream>
+#include <stdexcept>
+#include <string>
 
 #include "AComponent.hpp"
 #include "tekspice.hpp"
 
 nts::Circuit::Circuit() : _nb_components(0), _tick(0) {}
 
-nts::Circuit::~Circuit() {}
+nts::Circuit::~Circuit() = default;
 
-void nts::Circuit::AddComponent(IComponent &newComponent, std::string name)
+void nts::Circuit::AddComponent(IComponent &newComponent)
 {
-    if (_components.find(name) != _components.end())
+    if (_components.find(newComponent.getName()) != _components.end())
         throw std::out_of_range(
             "Same compoenet refered two times in the circuit");
-    this->_components.insert({name, &newComponent});
+    this->_components.insert({newComponent.getName(), &newComponent});
 }
 
 nts::IComponent &nts::Circuit::getComponent(std::string name)
 {
-    return *(this->_components.at(name));
+    IComponent *res = nullptr;
+    try {
+        res = this->_components.at(name);
+    } catch (const std::out_of_range &e) {
+        std::cout << e.what() << '\n';
+        throw std::out_of_range("elt not found in components");
+    }
+    return *(res);
 }
 
 void nts::Circuit::simulate(std::size_t /* ticks */)
