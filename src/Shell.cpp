@@ -7,6 +7,7 @@
 
 #include "Shell.hpp"
 
+#include <csignal>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -84,9 +85,12 @@ void nts::Shell::Simulate()
     _circuit->simulate(1);
 }
 
+static volatile bool looping = false;
 void nts::Shell::Loop()
 {
-    while (_running) {
+    looping = true;
+    std::signal(SIGINT, [](int /**/) { looping = false; });
+    while (looping) {
         Simulate();
         Display();
     }

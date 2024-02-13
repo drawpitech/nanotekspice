@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 
-#include "tekspice.hpp"
 #include "Circuit.hpp"
 
 namespace nts {
@@ -42,7 +41,6 @@ class Shell
     std::string _input;
     bool _running = false;
     Circuit *_circuit;
-    Shell::Command _runningCmd = UNDEFINED;
 
     void Exit();
     void Display();
