@@ -27,9 +27,9 @@ nts::Tristate nts::operator||(nts::Tristate left, nts::Tristate right)
 {
     switch (left) {
         case nts::Tristate::True:
-            return right;
+            return nts::Tristate::True;
         case nts::Tristate::False:
-            return nts::Tristate::False;
+            return right;
         case nts::Tristate::Undefined:
             if (right == nts::Tristate::False)
                 return nts::Tristate::False;

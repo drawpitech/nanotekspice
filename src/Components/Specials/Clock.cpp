@@ -31,6 +31,7 @@ void nts::ClockComponent::simulate(std::size_t tick)
     if (_updated) {
         _updated = false;
         this->_pins.at(1).state = _next;
+        return;
     }
     this->_pins.at(1).state = !this->_pins.at(1).state;
 }

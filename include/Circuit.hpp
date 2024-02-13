@@ -21,7 +21,7 @@ class Circuit
     ~Circuit();
 
     void AddComponent(IComponent &newComponent);
-    IComponent &getComponent(std::string name);
+    IComponent &getComponent(const std::string &name);
     void simulate(std::size_t ticks);
     void dump();
     void re_init();

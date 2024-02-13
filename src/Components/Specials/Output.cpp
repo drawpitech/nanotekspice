@@ -25,10 +25,8 @@ nts::Tristate nts::OutputComponent::compute(std::size_t pin)
 {
     if (pin > this->_nb_pins)
         throw std::out_of_range("Pin is out of range");
-    this->_pins.at(1).component->compute(this->_pins.at(1).pin);
 
-    const nts::Tristate res = this->_pins.at(1).component->getPinValue(1);
-
+    const nts::Tristate res = updatePin(1);
     this->_pins.at(2).state = res;
     return res;
 }

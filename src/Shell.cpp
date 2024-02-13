@@ -8,8 +8,10 @@
 #include "Shell.hpp"
 
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
+#include "Circuit.hpp"
 #include "tekspice.hpp"
 
 nts::Shell::Shell(Circuit* circuit) : _circuit(circuit) {}
@@ -98,7 +100,7 @@ void nts::Shell::Input()
         return;
     }
 
-    std::string pin_name = _input.substr(0, _input.find('='));
+    const std::string& pin_name = _input.substr(0, _input.find('='));
     std::string value_str = _input.substr(_input.find('=') + 1);
     Tristate state = Undefined;
     switch (value_str[0]) {
@@ -116,7 +118,7 @@ void nts::Shell::Input()
     try {
         (void)state;
         _circuit->getComponent(pin_name).setInput(state);
-    } catch (std::exception& e) {
+    } catch (std::out_of_range& e) {
         std::cerr << e.what() << std::endl;
     }
 }

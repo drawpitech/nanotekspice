@@ -27,13 +27,12 @@ void nts::Circuit::AddComponent(IComponent &newComponent)
     this->_components.insert({newComponent.getName(), &newComponent});
 }
 
-nts::IComponent &nts::Circuit::getComponent(std::string name)
+nts::IComponent &nts::Circuit::getComponent(const std::string &name)
 {
     IComponent *res = nullptr;
     try {
         res = this->_components.at(name);
     } catch (const std::out_of_range &e) {
-        std::cout << e.what() << '\n';
         throw std::out_of_range("elt not found in components");
     }
     return *(res);

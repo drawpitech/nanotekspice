@@ -52,6 +52,13 @@ nts::Tristate nts::AComponent::compute(size_t pin)
     return nts::Tristate::Undefined;
 }
 
+nts::Tristate nts::AComponent::updatePin(size_t pin)
+{
+    this->_pins.at(pin).state =
+        this->_pins.at(pin).component->compute(this->_pins.at(pin).pin);
+    return this->_pins.at(pin).state;
+}
+
 nts::Tristate nts::AComponent::getPinValue(std::size_t pin) const
 {
     if (pin > _nb_pins)
@@ -68,31 +75,17 @@ void nts::AComponent::setLink(
     _pins.at(pin).pin = otherPin;
 }
 
-static std::vector<nts::Pin> get_pins(
-    std::vector<nts::Pin> pins, nts::Type type)
-{
-    std::vector<nts::Pin> ret;
-    std::copy_if(
-        pins.begin(), pins.end(), std::back_inserter(ret),
-        [type](const nts::Pin &pin) { return pin.type == type; });
-    std::sort(
-        pins.begin(), pins.end(), [](const nts::Pin &a, const nts::Pin &b) {
-            return a.component->getName() < b.component->getName();
-        });
-    return ret;
-}
-
 void nts::AComponent::dump() const
 {
     std::cout << "tick: " << _tick << "\n"
               << "input(s):\n";
 
-    for (const auto &pin : get_pins(_pins, Input))
+    for (auto pin : _pins)
         if (pin.type == Input)
             std::cout << "  " << pin.component->getName() << " "
                       << TRISTATE_TO_CHAR.at(pin.state) << "\n";
     std::cout << "output(s):\n";
-    for (const auto &pin : get_pins(_pins, Output))
+    for (auto pin : _pins)
         if (pin.type == Output)
             std::cout << "  " << pin.component->getName() << ": "
                       << TRISTATE_TO_CHAR.at(pin.state) << "\n";
@@ -116,9 +109,6 @@ void nts::AComponent::setInput(nts::Tristate /* value */)
 
 void nts::AComponent::reset_pins()
 {
-    // for (auto pin : _pins) {
-    // pin.computed = false;
-    // }
     for (size_t i = 0; i < _nb_pins + 1; i++) {
         _pins.at(i).computed = false;
     }

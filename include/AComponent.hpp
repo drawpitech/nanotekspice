@@ -24,6 +24,7 @@ class AComponent : public IComponent
 
     void simulate(std::size_t tick) override;
     nts::Tristate compute(std::size_t pin) override;
+    nts::Tristate updatePin(std::size_t pin) override;
     nts::Tristate getPinValue(std::size_t pin) const final;
     void setLink(
         std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;

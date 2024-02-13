@@ -31,10 +31,7 @@ nts::Tristate nts::NotComponent::compute(std::size_t pin)
         throw std::out_of_range("Infinite loop");
     this->_pins.at(2).computed = true;
 
-    this->_pins.at(1).component->compute(this->_pins.at(1).pin);
-
-    const nts::Tristate res = !this->_pins.at(1).state;
-
+    const nts::Tristate res = !updatePin(1);
     this->_pins.at(2).state = res;
     return res;
 }
