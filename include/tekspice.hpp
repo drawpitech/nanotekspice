@@ -31,6 +31,8 @@ Tristate operator&&(Tristate left, Tristate right);
 Tristate operator||(Tristate left, Tristate right);
 Tristate operator!(Tristate entry);
 Tristate operator^(Tristate left, Tristate right);
+Tristate Nand(nts::Tristate left, nts::Tristate right);
+Tristate Nor(nts::Tristate left, nts::Tristate right);
 
 enum Type
 {

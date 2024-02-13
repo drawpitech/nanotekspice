@@ -59,3 +59,13 @@ nts::Tristate nts::operator^(nts::Tristate left, nts::Tristate right)
             return nts::Tristate::Undefined;
     }
 }
+
+nts::Tristate nts::Nand(nts::Tristate left, nts::Tristate right)
+{
+    return !(left && right);
+}
+
+nts::Tristate nts::Nor(nts::Tristate left, nts::Tristate right)
+{
+    return !(left || right);
+}
