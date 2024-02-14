@@ -23,7 +23,7 @@ void nts::Circuit::AddComponent(IComponent *newComponent)
 {
     if (_components.find(newComponent->getName()) != _components.end())
         throw std::out_of_range(
-            "Same compoenet refered two times in the circuit");
+            "Same componenet refered two times in the circuit");
     this->_components.insert(
         {newComponent->getName(), std::unique_ptr<IComponent>(newComponent)});
 }
@@ -34,7 +34,7 @@ nts::IComponent &nts::Circuit::getComponent(const std::string &name)
     try {
         res = this->_components.at(name).get();
     } catch (const std::out_of_range &e) {
-        throw std::out_of_range("elt not found in components");
+        throw std::out_of_range("elt: '" + name + "' not found in components");
     }
     return *(res);
 }

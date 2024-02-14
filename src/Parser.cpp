@@ -70,12 +70,15 @@ void nts::Parser::addChipset(const std::string &line, Circuit &circuit)
     // Validate chipset line with regex
     // example:
     //     4001 super_chip
+    std::smatch matches;
     if (!std::regex_search(
-            line, std::regex{R"(^[a-zA-Z0-9]+ [a-zA-Z0-9_-]+$)"}))
+            line, matches,
+            std::regex{R"(^([a-zA-Z0-9]+)\s+([a-zA-Z0-9_-]+)$)"}))
         throw std::invalid_argument("Invalid chipset line");
 
-    std::string chipset = line.substr(0, line.find(' '));
-    std::string name = line.substr(line.find(' ') + 1);
+    const std::string chipset = matches[1];
+    const std::string name = matches[2];
+
     IComponent *comp = Factory::createComponent(chipset, name);
     if (comp == nullptr)
         throw std::invalid_argument("Chipset not found");
@@ -84,42 +87,23 @@ void nts::Parser::addChipset(const std::string &line, Circuit &circuit)
 
 void nts::Parser::addLink(const std::string &line, Circuit &circuit)
 {
-    /*
-    InputComponent in_a{"in_a"};
-    ClockComponent clock{"clock"};
-    OrComponent Orgate{"Orgate"};
-    OutputComponent out_b{"out_b"};
-
-    in_a.setLink(1, Orgate, 1);
-    clock.setLink(1, Orgate, 2);
-    Orgate.setLink(1, in_a, 1);
-    Orgate.setLink(2, clock, 1);
-    out_b.setLink(1, Orgate, 3);
-    Orgate.setLink(3, out_b, 1);
-
-    Circuit dummy;
-    dummy.AddComponent(&in_a);
-    dummy.AddComponent(&clock);
-    dummy.AddComponent(&Orgate);
-    dummy.AddComponent(&out_b);
-    */
-
     // Validate link line with regex
     // example:
     //     in_1:1 and_gate:1
+    std::smatch matches;
     if (!std::regex_search(
-            line,
-            std::regex{R"(^[a-zA-Z0-9-_]+:[0-9]+ [a-zA-Z0-9-_]+:[0-9]+$)"}))
+            line, matches,
+            std::regex{
+                R"(^([a-zA-Z0-9-_]+):([0-9]+)\s+([a-zA-Z0-9-_]+):([0-9]+)$)"}))
         throw std::invalid_argument("Invalid chipset line");
 
-    std::string part1 = line.substr(0, line.find(' '));
-    std::string part2 = line.substr(part1.size() + 1);
+    const std::string name_comp1 = matches[1];
+    const size_t pin1 = std::stoi(matches[2]);
+    const std::string name_comp2 = matches[3];
+    const size_t pin2 = std::stoi(matches[4]);
 
-    IComponent &comp1 = circuit.getComponent(part1.substr(0, part1.find(':')));
-    IComponent &comp2 = circuit.getComponent(part2.substr(0, part2.find(':')));
-
-    size_t pin1 = std::stoi(part1.substr(part1.find(':') + 1));
-    size_t pin2 = std::stoi(part2.substr(part2.find(':') + 1));
+    IComponent &comp1 = circuit.getComponent(name_comp1);
+    IComponent &comp2 = circuit.getComponent(name_comp2);
 
     comp1.setLink(pin1, comp2, pin2);
     comp2.setLink(pin2, comp1, pin1);
