@@ -54,6 +54,10 @@ nts::Tristate nts::AComponent::compute(size_t pin)
 
 nts::Tristate nts::AComponent::updatePin(size_t pin)
 {
+    if (this->_pins.at(pin).component == nullptr) {
+        this->_pins.at(pin).state = nts::Tristate::Undefined;
+        return nts::Tristate::Undefined;
+    }
     this->_pins.at(pin).state =
         this->_pins.at(pin).component->compute(this->_pins.at(pin).pin);
     return this->_pins.at(pin).state;
