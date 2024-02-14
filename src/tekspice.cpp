@@ -32,7 +32,14 @@ int nts::tekspice(int argc, char **argv)
         return nts::RET_VALID;
     }
 
-    auto circuit = Parser(arg).getCircuit();
+    std::unique_ptr<nts::Circuit> circuit(nullptr);
+    try {
+        circuit = Parser(arg).getCircuit();
+    } catch (const std::exception &e) {
+        std::cerr << "tekspice: parser: " << e.what() << std::endl;
+        return nts::RET_ERROR;
+    }
+
     Shell shell(circuit.get());
     shell.run();
     return nts::RET_VALID;
