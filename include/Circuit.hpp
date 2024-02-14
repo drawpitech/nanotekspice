@@ -9,6 +9,7 @@
 
 #include <cstddef>
 #include <map>
+#include <memory>
 #include <string>
 
 #include "tekspice.hpp"
@@ -20,7 +21,7 @@ class Circuit
     Circuit();
     ~Circuit();
 
-    void AddComponent(IComponent &newComponent);
+    void AddComponent(IComponent *newComponent);
     IComponent &getComponent(const std::string &name);
     void simulate(std::size_t ticks);
     void dump();
@@ -28,7 +29,7 @@ class Circuit
 
    protected:
    private:
-    std::map<std::string, IComponent *> _components;
+    std::map<std::string, std::unique_ptr<IComponent>> _components;
     std::size_t _nb_components;
     size_t _tick;
 };

@@ -9,12 +9,8 @@
 
 #include <iostream>
 
-#include "AComponent.hpp"
 #include "Circuit.hpp"
-#include "Components/Elementary/AndComponent.hpp"
-#include "Components/Elementary/NotComponent.hpp"
 #include "Components/Elementary/OrComponent.hpp"
-#include "Components/Elementary/XorComponent.hpp"
 #include "Components/Specials/Clock.hpp"
 #include "Components/Specials/Input.hpp"
 #include "Components/Specials/Output.hpp"
@@ -39,6 +35,7 @@ int nts::tekspice(int argc, char **argv)
         nts::help();
         return nts::RET_VALID;
     }
+
     InputComponent in_a{"in_a"};
     ClockComponent clock{"clock"};
     OrComponent Orgate{"Orgate"};
@@ -52,10 +49,10 @@ int nts::tekspice(int argc, char **argv)
     Orgate.setLink(3, out_b, 1);
 
     Circuit dummy;
-    dummy.AddComponent(in_a);
-    dummy.AddComponent(clock);
-    dummy.AddComponent(Orgate);
-    dummy.AddComponent(out_b);
+    dummy.AddComponent(&in_a);
+    dummy.AddComponent(&clock);
+    dummy.AddComponent(&Orgate);
+    dummy.AddComponent(&out_b);
 
     Shell shell(&dummy);
     shell.run();
