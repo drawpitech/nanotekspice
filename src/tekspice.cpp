@@ -9,11 +9,7 @@
 
 #include <iostream>
 
-#include "Circuit.hpp"
-#include "Components/Elementary/OrComponent.hpp"
-#include "Components/Specials/Clock.hpp"
-#include "Components/Specials/Input.hpp"
-#include "Components/Specials/Output.hpp"
+#include "Parser.hpp"
 #include "Shell.hpp"
 
 int nts::tekspice(int argc, char **argv)
@@ -36,25 +32,8 @@ int nts::tekspice(int argc, char **argv)
         return nts::RET_VALID;
     }
 
-    InputComponent in_a{"in_a"};
-    ClockComponent clock{"clock"};
-    OrComponent Orgate{"Orgate"};
-    OutputComponent out_b{"out_b"};
-    //
-    in_a.setLink(1, Orgate, 1);
-    clock.setLink(1, Orgate, 2);
-    Orgate.setLink(1, in_a, 1);
-    Orgate.setLink(2, clock, 1);
-    out_b.setLink(1, Orgate, 3);
-    Orgate.setLink(3, out_b, 1);
-
-    Circuit dummy;
-    dummy.AddComponent(&in_a);
-    dummy.AddComponent(&clock);
-    dummy.AddComponent(&Orgate);
-    dummy.AddComponent(&out_b);
-
-    Shell shell(&dummy);
+    auto circuit = Parser(arg).getCircuit();
+    Shell shell(circuit.get());
     shell.run();
     return nts::RET_VALID;
 }
