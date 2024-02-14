@@ -69,8 +69,6 @@ $(NAME): $(OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CXX${C_RESET}] ${C_GREEN}$@${C_RESET}"
 	@ $(CXX) -o $@ $^ $(CXXFLAGS) || $(DIE)
 
-.PHONY: $(NAME)
-
 # ↓ Unit tests
 $(BUILD_DIR)/tests/%.o: %.cpp
 	@ mkdir -p $(dir $@)
@@ -88,7 +86,7 @@ $(TEST_NAME): $(TEST_OBJ)
 tests_run: $(TEST_NAME)
 	@ ./$^
 
-.PHONY: $(TEST_NAME) tests_run
+.PHONY: tests_run
 
 # ↓ Asan
 $(BUILD_DIR)/asan/%.o: %.cpp
@@ -103,8 +101,6 @@ $(ASAN_NAME): $(ASAN_OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CXX${C_RESET}] ${C_GREEN}$@${C_RESET}"
 	@ $(CXX) -o $@ $^ $(CXXFLAGS) || $(DIE)
 
-.PHONY: $(ASAN_NAME)
-
 # ↓ Profiler
 $(BUILD_DIR)/prof/%.o: %.cpp
 	@ mkdir -p $(dir $@)
@@ -115,8 +111,6 @@ $(PROF_NAME): CXXFLAGS += -pg
 $(PROF_NAME): $(PROF_OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CXX${C_RESET}] ${C_GREEN}$@${C_RESET}"
 	@ $(CXX) -o $@ $^ $(CXXFLAGS) || $(DIE)
-
-.PHONY: $(PROF_NAME)
 
 # ↓ Coverage
 cov: GCOVR_FLAGS := --exclude bonus/
