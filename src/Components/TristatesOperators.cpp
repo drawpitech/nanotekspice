@@ -31,7 +31,7 @@ nts::Tristate nts::operator||(nts::Tristate left, nts::Tristate right)
         case nts::Tristate::False:
             return right;
         case nts::Tristate::Undefined:
-            if (right == nts::Tristate::False)
+            if (right == nts::Tristate::True)
                 return nts::Tristate::False;
             return nts::Tristate::Undefined;
         default:
