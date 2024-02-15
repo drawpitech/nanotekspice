@@ -60,10 +60,10 @@ class CommandMatch
     std::regex _pattern;
 };
 static const std::vector<CommandMatch> COMMANDS_MATCH = {
-    {R"(\bexit\b)", Shell::EXIT},
-    {R"(\bdisplay\b)", Shell::DISPLAY},
-    {R"(\bsimulate\b)", Shell::SIMULATE},
-    {R"(\bloop\b)", Shell::LOOP},
-    {R"((\w+)=(U|0|1)$)", Shell::INPUT},
+    {R"(^exit$)", Shell::EXIT},
+    {R"(^display$)", Shell::DISPLAY},
+    {R"(^simulate$)", Shell::SIMULATE},
+    {R"(^loop$)", Shell::LOOP},
+    {R"(^\w+=[U01]$)", Shell::INPUT},
 };
 }  // namespace nts
