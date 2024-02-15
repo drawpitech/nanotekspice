@@ -21,3 +21,6 @@ core.*
 *.log
 *.gcda
 *.gcno
+
+*.json
+.vs*

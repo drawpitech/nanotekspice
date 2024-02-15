@@ -17,6 +17,7 @@
 nts::TrueComponent::TrueComponent(const std::string &name)
     : nts::AComponent(1, {}, {1}, name, Input)
 {
+    this->_pins.at(1).state = nts::Tristate::True;
 }
 
 nts::TrueComponent::~TrueComponent() = default;
@@ -28,7 +29,5 @@ nts::Tristate nts::TrueComponent::compute(std::size_t pin)
     if (this->_pins.at(1).computed)
         throw std::out_of_range("Pin used multiple times");
     this->_pins.at(1).computed = true;
-
-    this->_pins.at(1).state = nts::Tristate::True;
     return this->_pins.at(1).state;
 }

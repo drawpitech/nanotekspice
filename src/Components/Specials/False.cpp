@@ -13,9 +13,11 @@
 
 #include "AComponent.hpp"
 #include "tekspice.hpp"
+
 nts::FalseComponent::FalseComponent(const std::string &name)
     : nts::AComponent(1, {}, {1}, name, Input)
 {
+    this->_pins.at(1).state = nts::Tristate::False;
 }
 
 nts::FalseComponent::~FalseComponent() = default;
@@ -27,7 +29,5 @@ nts::Tristate nts::FalseComponent::compute(std::size_t pin)
     if (this->_pins.at(1).computed)
         throw std::out_of_range("Pin used multiple times");
     this->_pins.at(1).computed = true;
-
-    this->_pins.at(1).state = nts::Tristate::False;
     return this->_pins.at(1).state;
 }
