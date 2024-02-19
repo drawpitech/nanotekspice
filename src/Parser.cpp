@@ -92,10 +92,10 @@ void nts::Parser::addLink(const std::string &line, Circuit &circuit)
             line, matches, std::regex{R"(^(\w+):(\d+)\s+(\w+):(\d+)$)"}))
         throw std::invalid_argument("Invalid chipset line");
 
-    const std::string name_comp1 = matches[1];
-    const size_t pin1 = std::stoi(matches[2]);
-    const std::string name_comp2 = matches[3];
-    const size_t pin2 = std::stoi(matches[4]);
+    std::string name_comp1 = matches[1];
+    size_t pin1 = std::stoi(matches[2]);
+    std::string name_comp2 = matches[3];
+    size_t pin2 = std::stoi(matches[4]);
 
     IComponent &comp1 = circuit.getComponent(name_comp1);
     IComponent &comp2 = circuit.getComponent(name_comp2);

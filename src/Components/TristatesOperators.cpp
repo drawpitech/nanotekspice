@@ -18,9 +18,8 @@ nts::Tristate nts::operator&&(nts::Tristate left, nts::Tristate right)
             if (right == nts::Tristate::False)
                 return nts::Tristate::False;
             return nts::Tristate::Undefined;
-        default:
-            return nts::Tristate::Undefined;
     }
+    return nts::Tristate::Undefined;
 }
 
 nts::Tristate nts::operator||(nts::Tristate left, nts::Tristate right)
@@ -32,11 +31,10 @@ nts::Tristate nts::operator||(nts::Tristate left, nts::Tristate right)
             return right;
         case nts::Tristate::Undefined:
             if (right == nts::Tristate::True)
-                return nts::Tristate::False;
-            return nts::Tristate::Undefined;
-        default:
+                return nts::Tristate::True;
             return nts::Tristate::Undefined;
     }
+    return nts::Tristate::Undefined;
 }
 
 nts::Tristate nts::operator!(nts::Tristate entry)
@@ -55,9 +53,10 @@ nts::Tristate nts::operator^(nts::Tristate left, nts::Tristate right)
             return !right;
         case nts::Tristate::False:
             return right;
-        default:
+        case nts::Tristate::Undefined:
             return nts::Tristate::Undefined;
     }
+    return nts::Tristate::Undefined;
 }
 
 nts::Tristate nts::Nand(nts::Tristate left, nts::Tristate right)

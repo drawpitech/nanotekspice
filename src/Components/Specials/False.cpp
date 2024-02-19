@@ -29,5 +29,5 @@ nts::Tristate nts::FalseComponent::compute(std::size_t pin)
     if (this->_pins.at(1).computed)
         throw std::out_of_range("Pin used multiple times");
     this->_pins.at(1).computed = true;
-    return this->_pins.at(1).state;
+    return nts::Tristate::False;
 }
