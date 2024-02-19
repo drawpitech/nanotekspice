@@ -66,7 +66,8 @@ class Pin
           type(Type::Other),
           state(Tristate::Undefined),
           component(nullptr),
-          computed(false)
+          computed(false),
+          value_set(false)
     {
     }
     ~Pin() = default;
@@ -76,5 +77,6 @@ class Pin
     Tristate state;
     nts::IComponent *component;
     bool computed;
+    bool value_set;
 };
 }  // namespace nts

@@ -41,6 +41,7 @@ class AComponent : public IComponent
     size_t _tick;
     std::string _name;
     Type _type;
+    bool _is_simulate;
 
    private:
 };

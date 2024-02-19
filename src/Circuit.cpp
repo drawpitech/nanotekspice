@@ -42,6 +42,9 @@ nts::IComponent &nts::Circuit::getComponent(const std::string &name)
 void nts::Circuit::simulate(std::size_t /* ticks */)
 {
     for (auto &[_, component] : _components) {
+        component->simulate(1);
+    }
+    for (auto &[_, component] : _components) {
         if (component->getType() != nts::Type::Output)
             continue;
         component->compute(2);

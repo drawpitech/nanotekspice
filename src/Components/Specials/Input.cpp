@@ -21,10 +21,11 @@ nts::InputComponent::InputComponent(const std::string &name)
 
 nts::InputComponent::~InputComponent() = default;
 
-void nts::InputComponent::simulate(std::size_t tick)
+void nts::InputComponent::simulate(std::size_t /* tick */)
 {
-    if (tick == 0)
+    if (_is_simulate)
         return;
+    _is_simulate = true;
     _tick += 1;
     this->_pins.at(1).state = _next;
 }

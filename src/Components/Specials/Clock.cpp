@@ -23,11 +23,11 @@ nts::ClockComponent::ClockComponent(const std::string &name)
 
 nts::ClockComponent::~ClockComponent() = default;
 
-void nts::ClockComponent::simulate(std::size_t tick)
+void nts::ClockComponent::simulate(std::size_t /* tick */)
 {
-    if (tick == 0)
+    if (_is_simulate)
         return;
-    _tick += 1;
+    _is_simulate = true;
     if (_updated) {
         _updated = false;
         this->_pins.at(1).state = _next;

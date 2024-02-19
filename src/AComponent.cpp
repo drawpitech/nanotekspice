@@ -24,7 +24,8 @@ nts::AComponent::AComponent(
       _nb_pins(nb_pins),
       _tick(0),
       _name(std::move(name)),
-      _type(type)
+      _type(type),
+      _is_simulate(false)
 {
     for (auto pin : inPins)
         _pins.at(pin).type = Input;
@@ -37,6 +38,7 @@ nts::AComponent::~AComponent() = default;
 void nts::AComponent::simulate(std::size_t tick)
 {
     _tick += tick;
+    _is_simulate = true;
 }
 
 nts::Tristate nts::AComponent::compute(size_t pin)
@@ -60,6 +62,7 @@ nts::Tristate nts::AComponent::updatePin(size_t pin)
     }
     this->_pins.at(pin).state =
         this->_pins.at(pin).component->compute(this->_pins.at(pin).pin);
+    this->_pins.at(pin).computed = true;
     return this->_pins.at(pin).state;
 }
 
@@ -113,7 +116,9 @@ void nts::AComponent::setInput(nts::Tristate /* value */)
 
 void nts::AComponent::reset_pins()
 {
+    this->_is_simulate = false;
     for (size_t i = 0; i < _nb_pins + 1; i++) {
         _pins.at(i).computed = false;
+        _pins.at(i).value_set = false;
     }
 }
