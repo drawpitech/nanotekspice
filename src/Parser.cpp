@@ -23,6 +23,7 @@ std::unique_ptr<nts::Circuit> nts::Parser::getCircuit()
     auto circuit = std::make_unique<Circuit>();
     std::ifstream file(_file);
 
+    _empty = true;
     if (!file.is_open())
         throw std::invalid_argument("File not found");
 
@@ -30,6 +31,9 @@ std::unique_ptr<nts::Circuit> nts::Parser::getCircuit()
     while (getline(file, line))
         parseLine(line, *circuit.get());
     file.close();
+
+    if (_empty)
+        throw std::invalid_argument("Empty file");
 
     return circuit;
 }
@@ -39,10 +43,16 @@ void nts::Parser::parseLine(const std::string &line, Circuit &circuit)
     if (line.empty() || line.at(0) == '#')
         return;
 
+    size_t i = line.find('#');
+    if (i != std::string::npos) {
+        parseLine(line.substr(0, i), circuit);
+        return;
+    }
+
     // Line is a section
-    if (std::regex_search(line, std::regex{R"(^\.(\w+):$)"})) {
-        std::string section =
-            line.substr(1, line.size() - 2 - (long)line.ends_with('\n'));
+    std::smatch matches;
+    if (std::regex_search(line, matches, std::regex{R"(^\.(\w+):(\s+)?$)"})) {
+        std::string section = matches[1].str().empty() ? matches[0].str() : matches[1].str();
         if (!lineType.contains(section))
             throw std::invalid_argument("Section not found");
         _section = lineType.at(section);
@@ -70,8 +80,9 @@ void nts::Parser::addChipset(const std::string &line, Circuit &circuit)
     // example:
     //     4001 super_chip
     std::smatch matches;
-    if (!std::regex_search(line, matches, std::regex{R"(^(\w+)\s+(\w+)$)"}))
+    if (!std::regex_search(line, matches, std::regex{R"(^(\w+)\s+(\w+)(\s+)?$)"}))
         throw std::invalid_argument("Invalid chipset line");
+    _empty = false;
 
     const std::string chipset = matches[1];
     const std::string name = matches[2];
@@ -89,7 +100,7 @@ void nts::Parser::addLink(const std::string &line, Circuit &circuit)
     //     in_1:1 and_gate:1
     std::smatch matches;
     if (!std::regex_search(
-            line, matches, std::regex{R"(^(\w+):(\d+)\s+(\w+):(\d+)$)"}))
+            line, matches, std::regex{R"(^(\w+):(\d+)\s+(\w+):(\d+)(\s+)?$)"}))
         throw std::invalid_argument("Invalid chipset line");
 
     std::string name_comp1 = matches[1];

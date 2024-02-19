@@ -31,6 +31,7 @@ class Parser
    private:
     std::string _file;
     LineType _section = UNDEFINED;
+    bool _empty = true;
 
     void parseLine(const std::string &line, Circuit &circuit);
 
