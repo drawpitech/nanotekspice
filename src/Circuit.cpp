@@ -39,7 +39,7 @@ nts::IComponent &nts::Circuit::getComponent(const std::string &name)
     return *(res);
 }
 
-void nts::Circuit::simulate(std::size_t /* ticks */)
+void nts::Circuit::simulate(std::size_t ticks)
 {
     for (auto &[_, component] : _components) {
         component->simulate(1);
@@ -49,7 +49,8 @@ void nts::Circuit::simulate(std::size_t /* ticks */)
             continue;
         component->compute(2);
     }
-    _tick += 1;
+    if (ticks != 0)
+        _tick += 1;
     this->re_init();
 }
 

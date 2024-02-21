@@ -21,6 +21,8 @@ nts::Shell::~Shell() = default;
 
 void nts::Shell::run()
 {
+    _circuit->simulate(0);
+
     _running = true;
     while (_running) {
         nts::Shell::Command cmd = prompt();

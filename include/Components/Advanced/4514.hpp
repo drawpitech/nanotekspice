@@ -30,8 +30,10 @@ class C4514Component : public AComponent
     std::array<nts::Tristate, 4> _actual_inputs;
     std::array<size_t, 16> _in_to_out = {11, 9,  10, 8,  7,  6,  5,  4,
                                          18, 17, 20, 19, 14, 13, 16, 15};
+    nts::Tristate _old_strobe;
 
     nts::Tristate getRes();
+    void setAllOutputs(nts::Tristate state);
 };
 
 }  // namespace nts

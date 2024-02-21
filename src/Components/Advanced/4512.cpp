@@ -30,7 +30,9 @@ nts::Tristate nts::C4512Component::getRes()
 
     if (updatePin(15) != nts::Tristate::False)
         return nts::Tristate::Undefined;
-    if (updatePin(10) != nts::Tristate::False)
+    if (updatePin(10) == nts::Tristate::Undefined)
+        return nts::Tristate::Undefined;
+    if (_pins.at(10).state == nts::Tristate::True)
         return nts::Tristate::False;
 
     size_t selector = (A == nts::Tristate::True ? 1 : 0) +

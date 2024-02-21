@@ -10,6 +10,8 @@
 #include <functional>
 #include <map>
 
+#include "Components/Advanced/4512.hpp"
+#include "Components/Advanced/4514.hpp"
 #include "Components/Elementary/AndComponent.hpp"
 #include "Components/Elementary/NandComponent.hpp"
 #include "Components/Elementary/NorComponent.hpp"
@@ -69,5 +71,9 @@ static const std::map<std::string, FactoryLambda> FACTORY_MAP = {
     {"not", CREATE_COMPONENT(Not)},
     {"or", CREATE_COMPONENT(Or)},
     {"xor", CREATE_COMPONENT(Xor)},
+
+    // Advanced components
+    {"4514", CREATE_COMPONENT(C4514)},
+    {"4512", CREATE_COMPONENT(C4512)},
 };
 }  // namespace nts
