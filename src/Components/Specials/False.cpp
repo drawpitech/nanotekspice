@@ -15,7 +15,7 @@
 #include "tekspice.hpp"
 
 nts::FalseComponent::FalseComponent(const std::string &name)
-    : nts::AComponent(1, {}, {1}, name, Input)
+    : nts::AComponent(1, {}, {1}, name, nts::Other)
 {
     this->_pins.at(1).state = nts::Tristate::False;
 }
