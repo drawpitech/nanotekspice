@@ -10,6 +10,7 @@
 #include <functional>
 #include <map>
 
+#include "Components/Advanced/4008.hpp"
 #include "Components/Advanced/4512.hpp"
 #include "Components/Advanced/4514.hpp"
 #include "Components/Elementary/AndComponent.hpp"
@@ -73,6 +74,7 @@ static const std::map<std::string, FactoryLambda> FACTORY_MAP = {
     {"xor", CREATE_COMPONENT(Xor)},
 
     // Advanced components
+    {"4008", CREATE_COMPONENT(C4008)},
     {"4514", CREATE_COMPONENT(C4514)},
     {"4512", CREATE_COMPONENT(C4512)},
 };

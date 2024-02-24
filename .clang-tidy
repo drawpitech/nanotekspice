@@ -15,6 +15,7 @@ Checks: "-*,
   -modernize-use-trailing-return-type,
   llvm-*,
   cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-magic-numbers,
 "
 
 CheckOptions:

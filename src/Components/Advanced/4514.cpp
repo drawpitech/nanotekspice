@@ -75,9 +75,7 @@ nts::Tristate nts::C4514Component::compute(std::size_t pin)
     if (this->_pins.at(pin).computed)
         throw std::out_of_range("Infinite loop");
 
-    nts::Tristate res = _pins.at(pin).state;
-
     this->_pins.at(pin).computed = true;
-    this->_pins.at(pin).state = res;
-    return res;
+    return _pins.at(pin).state;
+    ;
 }
