@@ -52,16 +52,12 @@ void nts::C4514Component::simulate(std::size_t /* tick */)
         _actual_inputs.at(3) = updatePin(22);
     }
     _old_strobe = Strobe;
-    if (updatePin(23) != nts::Tristate::False) {
+    if (updatePin(23) == nts::Tristate::True) {
         this->setAllOutputs(!(_pins.at(23).state));
         return;
     }
     size_t selector = 0;
     for (size_t i = 0; i < 4; i++) {
-        if (_previous_inputs.at(i) == nts::Tristate::Undefined) {
-            this->setAllOutputs(nts::Tristate::Undefined);
-            return;
-        }
         selector += (_previous_inputs.at(i) == nts::Tristate::True ? 1 : 0)
                     << i;
     }
