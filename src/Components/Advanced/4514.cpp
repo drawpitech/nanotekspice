@@ -73,5 +73,4 @@ nts::Tristate nts::C4514Component::compute(std::size_t pin)
 
     this->_pins.at(pin).computed = true;
     return _pins.at(pin).state;
-    ;
 }
