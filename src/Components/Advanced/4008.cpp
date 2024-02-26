@@ -44,18 +44,25 @@ void nts::C4008Component::simulate(std::size_t /* tick */)
     _is_simulate = true;
     nts::Tristate c = updatePin(9);
     _pins.at(10).state = addPins(updatePin(6), updatePin(7), c);
+    _pins.at(10).value_set = true;
     _pins.at(11).state = addPins(updatePin(4), updatePin(5), c);
+    _pins.at(11).value_set = true;
     _pins.at(12).state = addPins(updatePin(2), updatePin(3), c);
+    _pins.at(12).value_set = true;
     _pins.at(13).state = addPins(updatePin(15), updatePin(1), c);
+    _pins.at(13).value_set = true;
     _pins.at(14).state = c;
+    _pins.at(14).value_set = true;
 }
 
 nts::Tristate nts::C4008Component::compute(std::size_t pin)
 {
-    this->simulate(0);
+    this->_pins.at(pin).computed = true;
+    if (this->_pins.at(pin).value_set)
+        return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
         throw std::out_of_range("Infinite loop");
+    this->simulate(0);
 
-    this->_pins.at(pin).computed = true;
     return _pins.at(pin).state;
 }

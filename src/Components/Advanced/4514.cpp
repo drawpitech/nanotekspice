@@ -67,10 +67,12 @@ void nts::C4514Component::simulate(std::size_t /* tick */)
 
 nts::Tristate nts::C4514Component::compute(std::size_t pin)
 {
-    this->simulate(0);
+    this->_pins.at(pin).computed = true;
+    if (this->_pins.at(pin).value_set)
+        return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
         throw std::out_of_range("Infinite loop");
+    this->simulate(0);
 
-    this->_pins.at(pin).computed = true;
     return _pins.at(pin).state;
 }

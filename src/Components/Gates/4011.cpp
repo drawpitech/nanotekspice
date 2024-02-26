@@ -23,14 +23,13 @@ nts::FourNandComponent::~FourNandComponent() = default;
 
 nts::Tristate nts::FourNandComponent::compute(std::size_t pin)
 {
-    // if (pin > this->_nb_pins)
-    // throw std::out_of_range("Pin is out of range");
-    // if (this->_pins.at(pin).type != nts::Output)
-    // return nts::Tristate::Undefined;
+    if (this->_pins.at(pin).value_set)
+        return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
         throw std::out_of_range("Infinite loop");
+    this->_pins.at(pin).computed = true;
 
-    nts::Tristate res;
+    nts::Tristate res = nts::Tristate::Undefined;
     switch (pin) {
         case 3:
         case 10:
@@ -48,7 +47,7 @@ nts::Tristate nts::FourNandComponent::compute(std::size_t pin)
             throw std::out_of_range("This is not an output pin");
             break;
     }
-    this->_pins.at(pin).computed = true;
     this->_pins.at(pin).state = res;
+    this->_pins.at(pin).value_set = true;
     return res;
 }

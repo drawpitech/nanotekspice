@@ -45,12 +45,14 @@ nts::Tristate nts::C4512Component::getRes()
 }
 nts::Tristate nts::C4512Component::compute(std::size_t pin)
 {
+    if (this->_pins.at(pin).value_set)
+        return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
         throw std::out_of_range("Infinite loop");
 
-    nts::Tristate res = getRes();
-
     this->_pins.at(pin).computed = true;
+    nts::Tristate res = getRes();
+    this->_pins.at(pin).value_set = true;
     this->_pins.at(pin).state = res;
     return res;
 }

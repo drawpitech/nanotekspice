@@ -30,6 +30,8 @@ void nts::C4013Component::computeFF(std::array<size_t, 6> pins)
     size_t Q = pins.at(4);
     size_t Qb = pins.at(5);
 
+    _pins.at(Q).value_set = true;
+    _pins.at(Qb).value_set = true;
     _pins.at(Q).state = nts::Tristate::Undefined;
     _pins.at(Qb).state = nts::Tristate::Undefined;
     if (reset == nts::Tristate::Undefined || set == nts::Tristate::Undefined)
@@ -56,10 +58,12 @@ void nts::C4013Component::simulate(std::size_t /* tick */)
 
 nts::Tristate nts::C4013Component::compute(std::size_t pin)
 {
-    this->simulate(0);
+    if (this->_pins.at(pin).value_set)
+        return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
         throw std::out_of_range("Infinite loop");
-
     this->_pins.at(pin).computed = true;
+    this->simulate(0);
+
     return _pins.at(pin).state;
 }

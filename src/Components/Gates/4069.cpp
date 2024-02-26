@@ -23,10 +23,13 @@ nts::SixNotComponent::~SixNotComponent() = default;
 
 nts::Tristate nts::SixNotComponent::compute(std::size_t pin)
 {
+    if (this->_pins.at(pin).value_set)
+        return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
         throw std::out_of_range("Infinite loop");
+    this->_pins.at(pin).computed = true;
 
-    nts::Tristate res;
+    nts::Tristate res = nts::Tristate::Undefined;
     switch (pin) {
         case 2:
         case 4:
@@ -46,7 +49,7 @@ nts::Tristate nts::SixNotComponent::compute(std::size_t pin)
             throw std::out_of_range("This is not an output pin");
             break;
     }
-    this->_pins.at(pin).computed = true;
     this->_pins.at(pin).state = res;
+    this->_pins.at(pin).value_set = true;
     return res;
 }
