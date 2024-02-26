@@ -12,6 +12,7 @@
 #include <string>
 
 #include "Circuit.hpp"
+#include "Exceptions.hpp"
 #include "tekspice.hpp"
 
 nts::Shell::Shell(Circuit* circuit) : _circuit(circuit) {}
@@ -123,7 +124,7 @@ void nts::Shell::Input()
     try {
         (void)state;
         _circuit->getComponent(pin_name).setInput(state);
-    } catch (std::out_of_range& e) {
+    } catch (nts::Exception& e) {
         std::cerr << e.what() << std::endl;
     }
 }
