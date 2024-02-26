@@ -95,7 +95,7 @@ $(BUILD_DIR)/debug/%.o: %.cpp
 	@ $(CXX) -o $@ -c $< $(CXXFLAGS) $(DEPS_FLAGS) || $(DIE)
 
 $(DEBUG_NAME): CXXFLAGS += -fanalyzer
-$(DEBUG_NAME): CXXFLAGS += -D DEBUG_MODE
+$(DEBUG_NAME): CXXFLAGS +=  -g3 -D DEBUG_MODE
 $(DEBUG_NAME): $(DEBUG_OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CXX${C_RESET}] ${C_GREEN}$@${C_RESET}"
 	@ $(CXX) -o $@ $^ $(CXXFLAGS) || $(DIE)
