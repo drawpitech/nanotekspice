@@ -41,7 +41,8 @@ std::unique_ptr<nts::Circuit> nts::Parser::getCircuit()
 
 void nts::Parser::parseLine(const std::string &line, Circuit &circuit)
 {
-    if (line.empty() || line.at(0) == '#')
+    if (line.empty() ||
+        std::regex_search(line, std::regex{R"(^\s*$|^\s*#.*$)"}))
         return;
 
     size_t i = line.find('#');
@@ -52,8 +53,10 @@ void nts::Parser::parseLine(const std::string &line, Circuit &circuit)
 
     // Line is a section
     std::smatch matches;
-    if (std::regex_search(line, matches, std::regex{R"(^\.(\w+):(\s+)?$)"})) {
-        std::string section = matches[1].str().empty() ? matches[0].str() : matches[1].str();
+    if (std::regex_search(
+            line, matches, std::regex{R"(^\s*\.(\w+):(\s+)?$)"})) {
+        std::string section =
+            matches[1].str().empty() ? matches[0].str() : matches[1].str();
         if (!lineType.contains(section))
             throw nts::Exception("Section not found");
         _section = lineType.at(section);
@@ -81,7 +84,8 @@ void nts::Parser::addChipset(const std::string &line, Circuit &circuit)
     // example:
     //     4001 super_chip
     std::smatch matches;
-    if (!std::regex_search(line, matches, std::regex{R"(^(\w+)\s+(\w+)(\s+)?$)"}))
+    if (!std::regex_search(
+            line, matches, std::regex{R"(^\s*(\w+)\s+(\w+)(\s+)?$)"}))
         throw nts::Exception("Invalid chipset line");
     _empty = false;
 
@@ -101,7 +105,8 @@ void nts::Parser::addLink(const std::string &line, Circuit &circuit)
     //     in_1:1 and_gate:1
     std::smatch matches;
     if (!std::regex_search(
-            line, matches, std::regex{R"(^(\w+):(\d+)\s+(\w+):(\d+)(\s+)?$)"}))
+            line, matches,
+            std::regex{R"(^\s*(\w+):(\d+)\s+(\w+):(\d+)(\s+)?$)"}))
         throw nts::Exception("Invalid chipset line");
 
     std::string name_comp1 = matches[1];
