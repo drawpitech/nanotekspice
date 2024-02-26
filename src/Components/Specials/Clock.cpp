@@ -8,10 +8,10 @@
 #include "Components/Specials/Clock.hpp"
 
 #include <cstddef>
-#include <stdexcept>
 #include <string>
 
 #include "AComponent.hpp"
+#include "Exceptions.hpp"
 #include "tekspice.hpp"
 
 nts::ClockComponent::ClockComponent(const std::string &name)
@@ -40,9 +40,9 @@ nts::Tristate nts::ClockComponent::compute(std::size_t pin)
 {
     this->simulate(1);
     if (pin > this->_nb_pins)
-        throw std::out_of_range("Pin is out of range");
+        throw nts::Exception("Pin is out of range");
     if (this->_pins.at(1).computed)
-        throw std::out_of_range("Pin used multiple times");
+        throw nts::Exception("Pin used multiple times");
     this->_pins.at(1).computed = true;
     return this->_pins.at(1).state;
 }

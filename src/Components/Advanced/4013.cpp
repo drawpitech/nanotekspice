@@ -8,10 +8,10 @@
 #include "Components/Advanced/4013.hpp"
 
 #include <cstddef>
-#include <stdexcept>
 #include <string>
 
 #include "AComponent.hpp"
+#include "Exceptions.hpp"
 #include "tekspice.hpp"
 
 nts::C4013Component::C4013Component(const std::string &name)
@@ -61,7 +61,7 @@ nts::Tristate nts::C4013Component::compute(std::size_t pin)
     if (this->_pins.at(pin).value_set)
         return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
-        throw std::out_of_range("Infinite loop");
+        throw nts::Exception("Infinite loop");
     this->_pins.at(pin).computed = true;
     this->simulate(0);
 

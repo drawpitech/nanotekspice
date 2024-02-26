@@ -8,10 +8,10 @@
 #include "Components/Advanced/4514.hpp"
 
 #include <cstddef>
-#include <stdexcept>
 #include <string>
 
 #include "AComponent.hpp"
+#include "Exceptions.hpp"
 #include "tekspice.hpp"
 
 nts::C4514Component::C4514Component(const std::string &name)
@@ -71,7 +71,7 @@ nts::Tristate nts::C4514Component::compute(std::size_t pin)
     if (this->_pins.at(pin).value_set)
         return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
-        throw std::out_of_range("Infinite loop");
+        throw nts::Exception("Infinite loop");
     this->simulate(0);
 
     return _pins.at(pin).state;

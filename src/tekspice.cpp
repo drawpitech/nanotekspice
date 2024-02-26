@@ -41,7 +41,12 @@ int nts::tekspice(int argc, char **argv)
     }
 
     Shell shell(circuit.get());
-    shell.run();
+    try {
+        shell.run();
+    } catch (const std::exception &e) {
+        std::cerr << "tekspice: shell: " << e.what() << std::endl;
+        return nts::RET_ERROR;
+    }
     return nts::RET_VALID;
 }
 

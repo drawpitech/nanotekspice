@@ -9,7 +9,6 @@
 
 #include <csignal>
 #include <iostream>
-#include <stdexcept>
 #include <string>
 
 #include "Circuit.hpp"

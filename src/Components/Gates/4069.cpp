@@ -8,10 +8,10 @@
 #include "Components/Gates/4069.hpp"
 
 #include <cstddef>
-#include <stdexcept>
 #include <string>
 
 #include "AComponent.hpp"
+#include "Exceptions.hpp"
 #include "tekspice.hpp"
 
 nts::SixNotComponent::SixNotComponent(const std::string &name)
@@ -26,7 +26,7 @@ nts::Tristate nts::SixNotComponent::compute(std::size_t pin)
     if (this->_pins.at(pin).value_set)
         return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
-        throw std::out_of_range("Infinite loop");
+        throw nts::Exception("Infinite loop");
     this->_pins.at(pin).computed = true;
 
     nts::Tristate res = nts::Tristate::Undefined;
@@ -46,7 +46,7 @@ nts::Tristate nts::SixNotComponent::compute(std::size_t pin)
             res = nts::Tristate::Undefined;
             break;
         default:
-            throw std::out_of_range("This is not an output pin");
+            throw nts::Exception("This is not an output pin");
             break;
     }
     this->_pins.at(pin).state = res;

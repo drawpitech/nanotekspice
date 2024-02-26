@@ -12,6 +12,7 @@
 #include <regex>
 #include <utility>
 
+#include "Exceptions.hpp"
 #include "Factory.hpp"
 
 nts::Parser::Parser(std::string file) : _file(std::move(file)) {}
@@ -25,7 +26,7 @@ std::unique_ptr<nts::Circuit> nts::Parser::getCircuit()
 
     _empty = true;
     if (!file.is_open())
-        throw std::invalid_argument("File not found");
+        throw nts::Exception("File not found");
 
     std::string line;
     while (getline(file, line))
@@ -33,7 +34,7 @@ std::unique_ptr<nts::Circuit> nts::Parser::getCircuit()
     file.close();
 
     if (_empty)
-        throw std::invalid_argument("Empty file");
+        throw nts::Exception("Empty file");
 
     return circuit;
 }
@@ -54,13 +55,13 @@ void nts::Parser::parseLine(const std::string &line, Circuit &circuit)
     if (std::regex_search(line, matches, std::regex{R"(^\.(\w+):(\s+)?$)"})) {
         std::string section = matches[1].str().empty() ? matches[0].str() : matches[1].str();
         if (!lineType.contains(section))
-            throw std::invalid_argument("Section not found");
+            throw nts::Exception("Section not found");
         _section = lineType.at(section);
         return;
     }
 
     if (_section == UNDEFINED)
-        throw std::invalid_argument("Should be a section");
+        throw nts::Exception("Should be a section");
 
     switch (_section) {
         case UNDEFINED:
@@ -81,7 +82,7 @@ void nts::Parser::addChipset(const std::string &line, Circuit &circuit)
     //     4001 super_chip
     std::smatch matches;
     if (!std::regex_search(line, matches, std::regex{R"(^(\w+)\s+(\w+)(\s+)?$)"}))
-        throw std::invalid_argument("Invalid chipset line");
+        throw nts::Exception("Invalid chipset line");
     _empty = false;
 
     const std::string chipset = matches[1];
@@ -89,7 +90,7 @@ void nts::Parser::addChipset(const std::string &line, Circuit &circuit)
 
     IComponent *comp = Factory::createComponent(chipset, name);
     if (comp == nullptr)
-        throw std::invalid_argument("Chipset not found");
+        throw nts::Exception("Chipset not found");
     circuit.AddComponent(comp);
 }
 
@@ -101,7 +102,7 @@ void nts::Parser::addLink(const std::string &line, Circuit &circuit)
     std::smatch matches;
     if (!std::regex_search(
             line, matches, std::regex{R"(^(\w+):(\d+)\s+(\w+):(\d+)(\s+)?$)"}))
-        throw std::invalid_argument("Invalid chipset line");
+        throw nts::Exception("Invalid chipset line");
 
     std::string name_comp1 = matches[1];
     size_t pin1 = std::stoi(matches[2]);

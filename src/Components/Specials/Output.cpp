@@ -8,10 +8,10 @@
 #include "Components/Specials/Output.hpp"
 
 #include <cstddef>
-#include <stdexcept>
 #include <string>
 
 #include "AComponent.hpp"
+#include "Exceptions.hpp"
 #include "tekspice.hpp"
 
 nts::OutputComponent::OutputComponent(const std::string &name)
@@ -24,7 +24,7 @@ nts::OutputComponent::~OutputComponent() = default;
 nts::Tristate nts::OutputComponent::compute(std::size_t pin)
 {
     if (pin > this->_nb_pins)
-        throw std::out_of_range("Pin is out of range");
+        throw nts::Exception("Pin is out of range");
 
     const nts::Tristate res = updatePin(1);
     this->_pins.at(2).state = res;

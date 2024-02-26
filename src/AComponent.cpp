@@ -7,14 +7,13 @@
 
 #include "AComponent.hpp"
 
-#include <algorithm>
 #include <cstddef>
 #include <iostream>
-#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
 
+#include "Exceptions.hpp"
 #include "tekspice.hpp"
 
 nts::AComponent::AComponent(
@@ -44,9 +43,9 @@ void nts::AComponent::simulate(std::size_t tick)
 nts::Tristate nts::AComponent::compute(size_t pin)
 {
     if (pin > _nb_pins)
-        throw std::out_of_range("Pin is out of range");
+        throw nts::Exception("Pin is out of range");
     if (_pins.at(pin).component == nullptr)
-        throw std::out_of_range("This pin is not set it should not append");
+        throw nts::Exception("This pin is not set it should not append");
     if (_pins.at(pin).type == Output)
         return _pins.at(pin).state;
     if (_pins.at(pin).type == Input)
@@ -69,7 +68,7 @@ nts::Tristate nts::AComponent::updatePin(size_t pin)
 nts::Tristate nts::AComponent::getPinValue(std::size_t pin) const
 {
     if (pin > _nb_pins)
-        throw std::out_of_range("Pin is out of range");
+        throw nts::Exception("Pin is out of range");
     return this->_pins.at(pin).state;
 }
 
@@ -77,7 +76,7 @@ void nts::AComponent::setLink(
     std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (pin > _nb_pins)
-        throw std::out_of_range("Pin is out of range");
+        throw nts::Exception("Pin is out of range");
     _pins.at(pin).component = &other;
     _pins.at(pin).pin = otherPin;
 }
@@ -110,7 +109,7 @@ std::string nts::AComponent::getName() const
 
 void nts::AComponent::setInput(nts::Tristate /* value */)
 {
-    throw std::out_of_range(
+    throw nts::Exception(
         "This method should't be called if component is not an input");
 }
 

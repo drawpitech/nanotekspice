@@ -9,10 +9,10 @@
 
 #include <cstddef>
 #include <iostream>
-#include <stdexcept>
 #include <string>
 
 #include "AComponent.hpp"
+#include "Exceptions.hpp"
 #include "tekspice.hpp"
 
 nts::Circuit::Circuit() : _nb_components(0), _tick(0) {}
@@ -22,7 +22,7 @@ nts::Circuit::~Circuit() = default;
 void nts::Circuit::AddComponent(IComponent *newComponent)
 {
     if (_components.find(newComponent->getName()) != _components.end())
-        throw std::out_of_range(
+        throw nts::Exception(
             "Same componenet refered two times in the circuit");
     this->_components.insert(
         {newComponent->getName(), std::unique_ptr<IComponent>(newComponent)});
@@ -34,7 +34,7 @@ nts::IComponent &nts::Circuit::getComponent(const std::string &name)
     try {
         res = this->_components.at(name).get();
     } catch (const std::out_of_range &e) {
-        throw std::out_of_range("elt: '" + name + "' not found in components");
+        throw nts::Exception("elt: '" + name + "' not found in components");
     }
     return *(res);
 }
