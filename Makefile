@@ -19,7 +19,7 @@ CXXFLAGS += -iquote ./include
 # ↓ Binaries
 NAME := nanotekspice
 TEST_NAME := unit_tests
-ASAN_NAME := asan
+DEBUG_NAME := debug
 PROF_NAME := prof
 
 # Source files
@@ -32,14 +32,14 @@ TEST_SRC := $(subst ./src/main.cpp,,$(SRC))
 BUILD_DIR := .build
 OBJ := $(SRC:%.cpp=$(BUILD_DIR)/source/%.o)
 TEST_OBJ := $(TEST_SRC:%.cpp=$(BUILD_DIR)/tests/%.o)
-ASAN_OBJ := $(SRC:%.cpp=$(BUILD_DIR)/asan/%.o)
+DEBUG_OBJ := $(SRC:%.cpp=$(BUILD_DIR)/debug/%.o)
 PROF_OBJ := $(SRC:%.cpp=$(BUILD_DIR)/prof/%.o)
 
 # ↓ Dependencies for headers
 DEPS_FLAGS := -MMD -MP
 DEPS := $(OBJ:.o=.d)
 TEST_DEPS := $(TEST_OBJ:.o=.d)
-ASAN_DEPS := $(ASAN_OBJ:.o=.d)
+DEBUG_DEPS := $(DEBUG_OBJ:.o=.d)
 PROF_DEPS := $(PROF_OBJ:.o=.d)
 
 ECHO := echo -e
@@ -89,15 +89,14 @@ tests_run: $(TEST_NAME)
 .PHONY: tests_run
 
 # ↓ Asan
-$(BUILD_DIR)/asan/%.o: %.cpp
+$(BUILD_DIR)/debug/%.o: %.cpp
 	@ mkdir -p $(dir $@)
 	@ $(ECHO) "[${C_BOLD}${C_RED}CXX${C_RESET}] $^"
 	@ $(CXX) -o $@ -c $< $(CXXFLAGS) $(DEPS_FLAGS) || $(DIE)
 
-$(ASAN_NAME): CXXFLAGS += -fsanitize=address,leak,undefined -g3
-$(ASAN_NAME): CXXFLAGS += -fanalyzer
-$(ASAN_NAME): CXXFLAGS += -D DEBUG_MODE
-$(ASAN_NAME): $(ASAN_OBJ)
+$(DEBUG_NAME): CXXFLAGS += -fanalyzer
+$(DEBUG_NAME): CXXFLAGS += -D DEBUG_MODE
+$(DEBUG_NAME): $(DEBUG_OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CXX${C_RESET}] ${C_GREEN}$@${C_RESET}"
 	@ $(CXX) -o $@ $^ $(CXXFLAGS) || $(DIE)
 
@@ -123,10 +122,10 @@ cov:
 
 # ↓ Cleaning
 clean:
-	@ $(RM) $(OBJ) $(TEST_OBJ) $(ASAN_OBJ)
+	@ $(RM) $(OBJ) $(TEST_OBJ) $(DEBUG_OBJ)
 
 fclean: clean
-	@ $(RM) $(NAME) $(TEST_NAME) $(ASAN_NAME) $(PROF_NAME)
+	@ $(RM) $(NAME) $(TEST_NAME) $(DEBUG_NAME) $(PROF_NAME)
 	@ $(RM) -r $(BUILD_DIR)
 
 .PHONY: clean fclean
@@ -138,5 +137,5 @@ re: fclean all
 
 -include $(DEPS)
 -include $(TEST_DEPS)
--include $(ASAN_DEPS)
+-include $(DEBUG_DEPS)
 -include $(PROF_DEPS)
