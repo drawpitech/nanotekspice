@@ -41,28 +41,29 @@ void nts::C4514Component::simulate(std::size_t /* tick */)
     if (_is_simulate)
         return;
     _is_simulate = true;
-    nts::Tristate Strobe = updatePin(1);
-    if (Strobe == nts::Tristate::Undefined)
-        return;
-    if (_old_strobe == nts::Tristate::True and Strobe == nts::Tristate::False) {
-        _previous_inputs = _actual_inputs;
-        _actual_inputs.at(0) = updatePin(2);
-        _actual_inputs.at(1) = updatePin(3);
-        _actual_inputs.at(2) = updatePin(21);
-        _actual_inputs.at(3) = updatePin(22);
-    }
-    _old_strobe = Strobe;
+    nts::Tristate strobe = updatePin(1);
+
+    _previous_inputs = _actual_inputs;
+    _actual_inputs.at(0) = updatePin(2);
+    _actual_inputs.at(1) = updatePin(3);
+    _actual_inputs.at(2) = updatePin(21);
+    _actual_inputs.at(3) = updatePin(22);
+
     if (updatePin(23) == nts::Tristate::True) {
         this->setAllOutputs(!(_pins.at(23).state));
+        _old_strobe = strobe;
         return;
     }
-    size_t selector = 0;
-    for (size_t i = 0; i < 4; i++) {
-        selector += (_previous_inputs.at(i) == nts::Tristate::True ? 1 : 0)
-                    << i;
+    if (_old_strobe == nts::Tristate::True and strobe == nts::Tristate::False) {
+        size_t selector = 0;
+        for (size_t i = 0; i < 4; i++) {
+            selector += (_previous_inputs.at(i) == nts::Tristate::True ? 1 : 0)
+                        << i;
+        }
+        this->setAllOutputs(nts::Tristate::False);
+        _pins.at(_in_to_out.at(selector)).state = nts::Tristate::True;
     }
-    this->setAllOutputs(nts::Tristate::False);
-    _pins.at(_in_to_out.at(selector)).state = nts::Tristate::True;
+    _old_strobe = strobe;
 }
 
 nts::Tristate nts::C4514Component::compute(std::size_t pin)
