@@ -24,6 +24,10 @@ class C4017Component : public AComponent
 
    protected:
    private:
+    nts::Tristate _prev_c0;
+    nts::Tristate _prev_c1;
+    size_t _counter;
+    void setValue();
 };
 
 }  // namespace nts
