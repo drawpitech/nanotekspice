@@ -46,13 +46,17 @@ void nts::C4040Component::simulate(std::size_t /* tick */)
     nts::Tristate clock = updatePin(10);
     nts::Tristate reset = updatePin(11);
 
+    for (auto &pin : _pins) {
+        if (pin.type == Input)
+            continue;
+        pin.value_set = true;
+    }
     if (reset == nts::Tristate::True) {
         _counter = 0;
         for (auto &pin : _pins) {
             if (pin.type == Input)
                 continue;
             pin.state = nts::Tristate::False;
-            pin.value_set = true;
         }
     }
     if (reset == nts::Tristate::False && _prev_clock == nts::Tristate::True &&
@@ -64,12 +68,12 @@ void nts::C4040Component::simulate(std::size_t /* tick */)
 
 nts::Tristate nts::C4040Component::compute(std::size_t pin)
 {
-    this->simulate(0);
     if (this->_pins.at(pin).value_set)
         return this->_pins.at(pin).state;
     if (this->_pins.at(pin).computed)
         throw nts::Exception("Infinite loop");
-
     this->_pins.at(pin).computed = true;
+    this->simulate(0);
+
     return this->_pins.at(pin).state;
 }

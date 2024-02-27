@@ -12,6 +12,7 @@
 
 #include "Components/Advanced/4008.hpp"
 #include "Components/Advanced/4013.hpp"
+#include "Components/Advanced/4017.hpp"
 #include "Components/Advanced/4040.hpp"
 #include "Components/Advanced/4094.hpp"
 #include "Components/Advanced/4512.hpp"
@@ -83,5 +84,6 @@ static const std::map<std::string, FactoryLambda> FACTORY_MAP = {
     {"4512", CREATE_COMPONENT(C4512)},
     {"4094", CREATE_COMPONENT(C4094)},
     {"4040", CREATE_COMPONENT(C4040)},
+    {"4017", CREATE_COMPONENT(C4017)},
 };
 }  // namespace nts
