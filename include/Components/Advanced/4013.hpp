@@ -25,7 +25,9 @@ class C4013Component : public AComponent
 
    protected:
    private:
-    void computeFF(std::array<size_t, 6> pins);
+    void computeFF(std::array<size_t, 6> pins, bool flipflop1);
+    nts::Tristate _prev_c1;
+    nts::Tristate _prev_c2;
 };
 
 }  // namespace nts

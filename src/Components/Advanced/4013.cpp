@@ -21,7 +21,7 @@ nts::C4013Component::C4013Component(const std::string &name)
 
 nts::C4013Component::~C4013Component() = default;
 
-void nts::C4013Component::computeFF(std::array<size_t, 6> pins)
+void nts::C4013Component::computeFF(std::array<size_t, 6> pins, bool flipflop1)
 {
     nts::Tristate data = updatePin(pins.at(0));
     nts::Tristate set = updatePin(pins.at(1));
@@ -41,8 +41,14 @@ void nts::C4013Component::computeFF(std::array<size_t, 6> pins)
         _pins.at(Qb).state = reset;
         return;
     }
-    if (clock != nts::Tristate::True)
-        return;
+    if (flipflop1) {
+        if (clock == _prev_c1 || _prev_c1 == nts::Tristate::True)
+            return;
+    } else {
+        if (clock == _prev_c2 || _prev_c2 == nts::Tristate::True)
+            return;
+    }
+
     _pins.at(Q).state = data;
     _pins.at(Qb).state = !data;
 }
@@ -52,8 +58,10 @@ void nts::C4013Component::simulate(std::size_t /* tick */)
     if (_is_simulate)
         return;
     _is_simulate = true;
-    this->computeFF({5, 6, 4, 3, 1, 2});
-    this->computeFF({9, 8, 10, 11, 13, 12});
+    this->computeFF({5, 6, 4, 3, 1, 2}, true);
+    this->computeFF({9, 8, 10, 11, 13, 12}, false);
+    _prev_c1 = _pins.at(3).state;
+    _prev_c2 = _pins.at(11).state;
 }
 
 nts::Tristate nts::C4013Component::compute(std::size_t pin)
