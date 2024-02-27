@@ -119,8 +119,5 @@ nts::Tristate nts::C4094Component::compute(std::size_t pin)
         throw nts::Exception("Infinite loop");
 
     this->_pins.at(pin).computed = true;
-    nts::Tristate res = nts::Tristate::Undefined;
-    this->_pins.at(pin).value_set = true;
-    this->_pins.at(pin).state = res;
-    return res;
+    return this->_pins.at(pin).state;
 }
