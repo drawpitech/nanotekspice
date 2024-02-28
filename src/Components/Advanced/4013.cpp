@@ -32,8 +32,6 @@ void nts::C4013Component::computeFF(std::array<size_t, 6> pins, bool flipflop1)
 
     _pins.at(Q).value_set = true;
     _pins.at(Qb).value_set = true;
-    _pins.at(Q).state = nts::Tristate::Undefined;
-    _pins.at(Qb).state = nts::Tristate::Undefined;
     if (reset == nts::Tristate::Undefined || set == nts::Tristate::Undefined)
         return;
     if (reset == nts::Tristate::True || set == nts::Tristate::True) {
