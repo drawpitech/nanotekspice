@@ -39,8 +39,7 @@ void nts::C4094Component::setValuesTrue()
 void nts::C4094Component::clockUp(
     nts::Tristate enable, nts::Tristate strobe, nts::Tristate data)
 {
-    if (enable == nts::Tristate::Undefined ||
-        strobe == nts::Tristate::Undefined)
+    if (enable == nts::Tristate::Undefined)
         return;
     if (enable == nts::Tristate::False) {
         _pins.at(11).state = nts::Tristate::Undefined;
@@ -54,6 +53,8 @@ void nts::C4094Component::clockUp(
         _pins.at(9).state = _pins.at(12).state;
         return;
     }
+    if (strobe == nts::Tristate::Undefined)
+        return;
     if (strobe == nts::Tristate::False) {
         _pins.at(9).state = _pins.at(12).state;
         return;
@@ -71,9 +72,9 @@ void nts::C4094Component::clockUp(
 void nts::C4094Component::clockDown(
     nts::Tristate enable, nts::Tristate strobe, nts::Tristate /* data */)
 {
-    if (enable == nts::Tristate::Undefined ||
-        strobe == nts::Tristate::Undefined)
+    if (enable == nts::Tristate::Undefined)
         return;
+    _pins.at(10).state = nts::Tristate::False;
     if (enable == nts::Tristate::False) {
         _pins.at(11).state = nts::Tristate::Undefined;
         _pins.at(12).state = nts::Tristate::Undefined;
@@ -86,7 +87,7 @@ void nts::C4094Component::clockDown(
         _pins.at(10).state = _pins.at(12).state;
         return;
     }
-    if (strobe == nts::Tristate::False) {
+    if (strobe == nts::Tristate::False || strobe == nts::Tristate::Undefined) {
         return;
     }
     _pins.at(10).state = _pins.at(12).state;
