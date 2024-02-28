@@ -50,8 +50,10 @@ void nts::C4514Component::simulate(std::size_t /* tick */)
     _actual_inputs.at(3) = updatePin(22);
 
     if (updatePin(23) == nts::Tristate::True) {
-        this->setAllOutputs(!(_pins.at(23).state));
-        _old_strobe = strobe;
+        for (auto &pin : _pins)
+            pin.value_set = true;
+        // this->setAllOutputs(!(_pins.at(23).state));
+        // _old_strobe = strobe;
         return;
     }
     if (_old_strobe == nts::Tristate::True and strobe == nts::Tristate::False) {
@@ -63,17 +65,25 @@ void nts::C4514Component::simulate(std::size_t /* tick */)
         this->setAllOutputs(nts::Tristate::False);
         _pins.at(_in_to_out.at(selector)).state = nts::Tristate::True;
     }
+    for (size_t i = 0; i < 4; i++)
+        if (_previous_inputs.at(i) == nts::Tristate::Undefined)
+            this->setAllOutputs(nts::Tristate::Undefined);
     _old_strobe = strobe;
 }
 
 nts::Tristate nts::C4514Component::compute(std::size_t pin)
 {
-    if (this->_pins.at(pin).value_set)
+    if (this->_pins.at(pin).value_set) {
+        if (this->_pins.at(23).state == nts::Tristate::True)
+            return nts::Tristate::False;
         return this->_pins.at(pin).state;
+    }
     if (this->_pins.at(pin).computed)
         throw nts::Exception("Infinite loop");
     this->_pins.at(pin).computed = true;
     this->simulate(0);
 
+    if (this->_pins.at(23).state == nts::Tristate::True)
+        return nts::Tristate::False;
     return _pins.at(pin).state;
 }
