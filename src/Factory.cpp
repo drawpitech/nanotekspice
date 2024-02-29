@@ -7,7 +7,7 @@
 
 #include "Factory.hpp"
 
-nts::IComponent *nts::Factory::createComponent(
+std::unique_ptr<nts::IComponent> nts::Factory::createComponent(
     const std::string &type, const std::string &name)
 {
     return FACTORY_MAP.contains(type) ? FACTORY_MAP.at(type)(name) : nullptr;

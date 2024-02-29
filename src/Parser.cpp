@@ -92,10 +92,10 @@ void nts::Parser::addChipset(const std::string &line, Circuit &circuit)
     const std::string chipset = matches[1];
     const std::string name = matches[2];
 
-    IComponent *comp = Factory::createComponent(chipset, name);
+    auto comp = Factory::createComponent(chipset, name);
     if (comp == nullptr)
         throw nts::Exception("Chipset not found");
-    circuit.AddComponent(comp);
+    circuit.AddComponent(std::move(comp));
 }
 
 void nts::Parser::addLink(const std::string &line, Circuit &circuit)

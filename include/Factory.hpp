@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <map>
+#include <memory>
 
 #include "Components/Advanced/4008.hpp"
 #include "Components/Advanced/4013.hpp"
@@ -41,51 +42,52 @@ namespace nts {
 class Factory
 {
    public:
-    static IComponent *createComponent(
+    static std::unique_ptr<IComponent> createComponent(
         const std::string &type, const std::string &name);
+
+    template <typename T>
+    static std::unique_ptr<IComponent> create(const std::string &name)
+    {
+        return std::make_unique<T>(name);
+    }
 };
 
-using FactoryLambda = std::function<IComponent *(const std::string &)>;
-
 // Macro to create a lambda function for the factory map
-#define CREATE_COMPONENT(type)                 \
-    (FactoryLambda)[](const std::string &name) \
-    {                                          \
-        return new type##Component(name);      \
-    }
+static const std::map<
+    std::string,
+    std::function<std::unique_ptr<IComponent>(const std::string &)>>
+    FACTORY_MAP = {
+        // Special components
+        {"clock", Factory::create<ClockComponent>},
+        {"false", Factory::create<FalseComponent>},
+        {"input", Factory::create<InputComponent>},
+        {"output", Factory::create<OutputComponent>},
+        {"true", Factory::create<TrueComponent>},
 
-static const std::map<std::string, FactoryLambda> FACTORY_MAP = {
-    // Special components
-    {"clock", CREATE_COMPONENT(Clock)},
-    {"false", CREATE_COMPONENT(False)},
-    {"input", CREATE_COMPONENT(Input)},
-    {"output", CREATE_COMPONENT(Output)},
-    {"true", CREATE_COMPONENT(True)},
+        // Logic gates
+        {"4001", Factory::create<FourNorComponent>},
+        {"4011", Factory::create<FourNandComponent>},
+        {"4030", Factory::create<FourXorComponent>},
+        {"4069", Factory::create<SixNotComponent>},
+        {"4071", Factory::create<FourOrComponent>},
+        {"4081", Factory::create<FourAndComponent>},
 
-    // Logic gates
-    {"4001", CREATE_COMPONENT(FourNor)},
-    {"4011", CREATE_COMPONENT(FourNand)},
-    {"4030", CREATE_COMPONENT(FourXor)},
-    {"4069", CREATE_COMPONENT(SixNot)},
-    {"4071", CREATE_COMPONENT(FourOr)},
-    {"4081", CREATE_COMPONENT(FourAnd)},
+        // Elementary components
+        {"and", Factory::create<AndComponent>},
+        {"nand", Factory::create<NandComponent>},
+        {"nor", Factory::create<NorComponent>},
+        {"not", Factory::create<NotComponent>},
+        {"or", Factory::create<OrComponent>},
+        {"xor", Factory::create<XorComponent>},
 
-    // Elementary components
-    {"and", CREATE_COMPONENT(And)},
-    {"nand", CREATE_COMPONENT(Nand)},
-    {"nor", CREATE_COMPONENT(Nor)},
-    {"not", CREATE_COMPONENT(Not)},
-    {"or", CREATE_COMPONENT(Or)},
-    {"xor", CREATE_COMPONENT(Xor)},
-
-    // Advanced components
-    {"4008", CREATE_COMPONENT(C4008)},
-    {"4013", CREATE_COMPONENT(C4013)},
-    {"4514", CREATE_COMPONENT(C4514)},
-    {"4512", CREATE_COMPONENT(C4512)},
-    {"4094", CREATE_COMPONENT(C4094)},
-    {"4040", CREATE_COMPONENT(C4040)},
-    {"4017", CREATE_COMPONENT(C4017)},
-    {"logger", CREATE_COMPONENT(logger)},
+        // Advanced components
+        {"4008", Factory::create<C4008Component>},
+        {"4013", Factory::create<C4013Component>},
+        {"4514", Factory::create<C4514Component>},
+        {"4512", Factory::create<C4512Component>},
+        {"4094", Factory::create<C4094Component>},
+        {"4040", Factory::create<C4040Component>},
+        {"4017", Factory::create<C4017Component>},
+        {"logger", Factory::create<loggerComponent>},
 };
 }  // namespace nts

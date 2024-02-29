@@ -19,13 +19,13 @@ nts::Circuit::Circuit() : _nb_components(0), _tick(0) {}
 
 nts::Circuit::~Circuit() = default;
 
-void nts::Circuit::AddComponent(IComponent *newComponent)
+void nts::Circuit::AddComponent(std::unique_ptr<IComponent> newComponent)
 {
     if (_components.find(newComponent->getName()) != _components.end())
         throw nts::Exception(
             "Same componenet refered two times in the circuit");
     this->_components.insert(
-        {newComponent->getName(), std::unique_ptr<IComponent>(newComponent)});
+        {newComponent->getName(), std::move(newComponent)});
 }
 
 nts::IComponent &nts::Circuit::getComponent(const std::string &name)
