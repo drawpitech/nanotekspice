@@ -8,7 +8,9 @@
 #include "Components/Advanced/logger.hpp"
 
 #include <cstddef>
+#include <cstdint>
 #include <fstream>
+#include <iostream>
 #include <ostream>
 #include <string>
 
@@ -23,12 +25,12 @@ nts::loggerComponent::loggerComponent(const std::string &name)
 
 nts::loggerComponent::~loggerComponent() = default;
 
-char nts::loggerComponent::getValue()
+uint8_t nts::loggerComponent::getValue()
 {
-    char res = '\0';
+    uint8_t res = '\0';
 
     for (size_t i = 0; i < 8; i++) {
-        res += (updatePin(i + 1) == nts::Tristate::True ? 1 : 0) << (7 - i);
+        res += (updatePin(i + 1) == nts::Tristate::True ? 1 : 0) << i;
     }
     return res;
 }
@@ -53,8 +55,8 @@ void nts::loggerComponent::simulate(std::size_t /* tick */)
         _prev_c = clock;
         return;
     }
-    char value = this->getValue();
-    std::ofstream log_file("log.bin");
+    uint8_t value = this->getValue();
+    std::ofstream log_file("log.bin", std::ios::app);
 
     if (!log_file.is_open())
         throw nts::Exception("Error: Unable to open log file");

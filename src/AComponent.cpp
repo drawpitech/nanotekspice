@@ -62,6 +62,7 @@ nts::Tristate nts::AComponent::updatePin(size_t pin)
     this->_pins.at(pin).state =
         this->_pins.at(pin).component->compute(this->_pins.at(pin).pin);
     this->_pins.at(pin).computed = true;
+    this->_pins.at(pin).value_set = true;
     return this->_pins.at(pin).state;
 }
 

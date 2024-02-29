@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 
 #include "AComponent.hpp"
 #include "tekspice.hpp"
@@ -26,7 +27,7 @@ class loggerComponent : public AComponent
    protected:
    private:
     nts::Tristate _prev_c;
-    char getValue();
+    uint8_t getValue();
 };
 
 }  // namespace nts
