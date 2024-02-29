@@ -46,9 +46,9 @@ class Factory
         const std::string &type, const std::string &name);
 
     template <typename T>
-    static std::unique_ptr<IComponent> create(const std::string &name)
+    static std::unique_ptr<IComponent> create(std::string name)
     {
-        return std::make_unique<T>(name);
+        return std::move(std::make_unique<T>(std::move(name)));
     }
 };
 
