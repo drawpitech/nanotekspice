@@ -67,6 +67,7 @@ void nts::C4094Component::clockUp(
     _pins.at(6).state = _pins.at(5).state;
     _pins.at(5).state = _pins.at(4).state;
     _pins.at(4).state = data;
+    _pins.at(9).state = _pins.at(12).state;
 }
 
 void nts::C4094Component::clockDown(
