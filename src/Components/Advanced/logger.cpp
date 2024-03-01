@@ -56,6 +56,10 @@ void nts::loggerComponent::simulate(std::size_t /* tick */)
         return;
     }
     uint8_t value = this->getValue();
+    for (size_t i = 0; i < 8; i++) {
+        if (this->_pins.at(i + 1).state == nts::Tristate::Undefined)
+            return;
+    }
     std::ofstream log_file("log.bin", std::ios::app);
 
     if (!log_file.is_open())
