@@ -83,8 +83,12 @@ $(TEST_NAME): $(TEST_OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CXX${C_RESET}] ${C_GREEN}$@${C_RESET}"
 	@ $(CXX) -o $@ $^ $(CXXFLAGS) || $(DIE)
 
-tests_run: $(TEST_NAME)
-	@ ./$^
+#tests_run: $(TEST_NAME)
+tests_run:
+	cmake -B build -S tests -GNinja
+#	cmake --build build
+	ninja -C build
+# @ ./$^
 
 .PHONY: tests_run
 
