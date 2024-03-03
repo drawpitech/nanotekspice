@@ -18,7 +18,7 @@ CXXFLAGS += -iquote ./include
 
 # ↓ Binaries
 NAME := nanotekspice
-TEST_NAME := unit_tests
+TEST_NAME := tests/unit_tests
 DEBUG_NAME := debug
 PROF_NAME := prof
 
@@ -75,20 +75,12 @@ $(BUILD_DIR)/tests/%.o: %.cpp
 	@ $(ECHO) "[${C_BOLD}${C_RED}CXX${C_RESET}] $^"
 	@ $(CXX) -o $@ -c $< $(CXXFLAGS) $(DEPS_FLAGS) || $(DIE)
 
-ifneq ($(NO_COV), 1)
-$(TEST_NAME): CXXFLAGS += -g3 --coverage
-endif
-$(TEST_NAME): CXXFLAGS += -lcriterion
-$(TEST_NAME): $(TEST_OBJ)
-	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CXX${C_RESET}] ${C_GREEN}$@${C_RESET}"
-	@ $(CXX) -o $@ $^ $(CXXFLAGS) || $(DIE)
+$(TEST_NAME):
+	@-cmake -B build -S tests -GNinja
+	@-ninja -C build
 
-#tests_run: $(TEST_NAME)
-tests_run:
-	cmake -B build -S tests -GNinja
-#	cmake --build build
-	ninja -C build
-# @ ./$^
+tests_run: $(TEST_NAME)
+	@-./$^
 
 .PHONY: tests_run
 
@@ -131,6 +123,7 @@ clean:
 fclean: clean
 	@ $(RM) $(NAME) $(TEST_NAME) $(DEBUG_NAME) $(PROF_NAME)
 	@ $(RM) -r $(BUILD_DIR)
+	@ $(RM) -r build
 
 .PHONY: clean fclean
 

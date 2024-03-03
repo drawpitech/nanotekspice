@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # project name
-project(test-nano)
+project(unit_tests)
 
 # move executable to root
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
@@ -34,7 +34,7 @@ enable_testing()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 
 add_executable(
-    test-nano
+    unit_tests
 
     ../src/Components/Gates/4001.cpp
     ../src/Components/Gates/4011.cpp
@@ -76,9 +76,9 @@ add_executable(
     )
 
 target_link_libraries(
-    test-nano PRIVATE
+    unit_tests PRIVATE
     GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(test-nano)
+gtest_discover_tests(unit_tests)

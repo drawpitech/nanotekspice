@@ -27,6 +27,9 @@
             man-pages
             man-pages-posix
             gdb
+            gtest
+            cmake
+            ninja
           ] ++ deps;
         };
 
